@@ -18,6 +18,7 @@ defmodule CodingTrainingElixirWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/chapter2", Chapter2Live
   end
 
   # Other scopes may use custom stacks.

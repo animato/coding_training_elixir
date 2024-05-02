@@ -1,0 +1,16 @@
+<.flash_group flash={@flash} />
+<div>
+  <h1>Chapter 2</h1>
+  <h2>글자 수 세기</h2>
+  <form phx-change="input-change">
+    <label for="input">
+      입력 값은 무엇입니까?
+      <input type="text" name="input-text" />
+    </label>
+  </form>
+  <div>
+    <%= if @length > 0 do %>
+      입력 값의 글자 수 는 <%= @length %> 입니다.
+    <% end %>
+  </div>
+</div>
