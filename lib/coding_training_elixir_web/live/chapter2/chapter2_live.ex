@@ -7,7 +7,7 @@ defmodule CodingTrainingElixirWeb.Chapter2Live do
   end
 
   def handle_event("input-change", %{"input-text" => text}, socket) do
-    socket = assign(socket, length: String.length(text))
+    socket = assign(socket, length: text |> String.trim |> String.length )
     {:noreply, socket}
   end
 end
