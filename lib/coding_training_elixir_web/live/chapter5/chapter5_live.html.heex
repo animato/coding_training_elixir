@@ -1,0 +1,24 @@
+<.flash_group flash={@flash} />
+<div>
+  <h1>Chapter 5</h1>
+  <h2>간단한 수학</h2>
+  <form phx-change="input-change" class="flex flex-col">
+    <div>
+      <.label for="quote" class="w-24">
+        What is the first number? <input type="text" name="number1" />
+      </.label>
+    </div>
+    <div>
+      <.label for="who" class="w-24">
+        What is the second number? <input type="text" name="number2" />
+      </.label>
+    </div>
+  </form>
+  <div>
+    <p>
+      <%= if String.length(@result) > 0 do
+        raw(@result)
+      end %>
+    </p>
+  </div>
+</div>

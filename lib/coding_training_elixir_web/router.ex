@@ -20,7 +20,7 @@ defmodule CodingTrainingElixirWeb.Router do
     get "/", PageController, :home
     live "/chapter2", Chapter2Live
     live "/chapter3", Chapter3Live
-
+    live "/chapter5", Chapter5Live
   end
 
   # Other scopes may use custom stacks.
