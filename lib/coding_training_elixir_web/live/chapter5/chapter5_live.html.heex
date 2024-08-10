@@ -1,24 +1,21 @@
 <.flash_group flash={@flash} />
 <div>
-  <h1>Chapter 5</h1>
-  <h2>간단한 수학</h2>
-  <form phx-change="input-change" class="flex flex-col">
+  <h1>Chapter 5 간단한 수학</h1>
+  <form phx-change="input-change" class="flex flex-col my-3">
     <div>
-      <.label for="quote" class="w-24">
-        What is the first number? <input type="text" name="number1" />
+      <.label for="number1">
+        첫번째 숫자를 입력하세요 <.input type="text" name="number1" value="" />
       </.label>
     </div>
     <div>
-      <.label for="who" class="w-24">
-        What is the second number? <input type="text" name="number2" />
+      <.label for="number2">
+        두번재 숫자를 입력하세요 <.input type="text" name="number2" value="" />
       </.label>
     </div>
   </form>
-  <div>
-    <p>
-      <%= if String.length(@result) > 0 do
-        raw(@result)
-      end %>
+  <div class="p-8 m-8 flex mx-auto bg-white rounded-xl shadow-lg max-w-sm mx-auto">
+    <p class="text-xl">
+      <%= raw(@result) %>
     </p>
   </div>
 </div>
