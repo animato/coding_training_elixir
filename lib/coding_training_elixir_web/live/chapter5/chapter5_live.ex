@@ -9,17 +9,34 @@ defmodule CodingTrainingElixirWeb.Chapter5Live do
   def handle_event("input-change", %{"number1" => number1, "number2" => number2}, socket) do
     case valid(number1, number2) do
       {:ok, {n1, n2}} ->
-        plus = number1 <> " + " <> number2 <> " = " <> Integer.to_string(n1 + n2)
-        minus = number1 <> " - " <> number2 <> " = " <> Integer.to_string(n1 - n2)
-        multi = number1 <> " * " <> number2 <> " = " <> Integer.to_string(n1 * n2)
-        divide = number1 <> " / " <> number2 <> " = " <> Float.to_string(n1 / n2)
-        result = plus <> "<br/>" <> minus <> "<br/>" <> multi <> "<br/>" <> divide
+        result =
+          ["+", "-", "*", "/"]
+          |> Enum.map(fn x -> calc(x, n1, n2) end)
+          |> Enum.map(fn x -> print(x) end)
+          |> Enum.join("<br/>")
+
         socket = assign(socket, result: result)
         {:noreply, socket}
 
       {:error, msg} ->
         socket = assign(socket, result: msg)
         {:noreply, socket}
+    end
+  end
+
+  def print({op, n1, n2, val}) do
+    case op do
+      "/" -> "#{n1} #{op} #{n2} = #{Float.to_string(val)}"
+      _ -> "#{n1} #{op} #{n2} = #{Integer.to_string(val)}"
+    end
+  end
+
+  def calc(op, n1, n2) do
+    case op do
+      "+" -> {op, n1, n2, n1 + n2}
+      "-" -> {op, n1, n2, n1 - n2}
+      "*" -> {op, n1, n2, n1 * n2}
+      "/" -> {op, n1, n2, n1 / n2}
     end
   end
 

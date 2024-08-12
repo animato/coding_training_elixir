@@ -1,0 +1,21 @@
+<.flash_group flash={@flash} />
+<div>
+  <h1>Chapter 6 퇴직 계산기</h1>
+  <form phx-change="input-change" class="flex flex-col my-3">
+    <div>
+      <.label for="age">
+        당신의 현재 나이는? <.input type="text" name="age" value="" />
+      </.label>
+    </div>
+    <div>
+      <.label for="retire">
+        몇살에 은퇴하고 싶습니까? <.input type="text" name="retire" value="" />
+      </.label>
+    </div>
+  </form>
+  <div class="p-8 m-8 flex mx-auto bg-white rounded-xl shadow-lg max-w-sm mx-auto">
+    <p class="text-xl">
+      <%= raw(@result) %>
+    </p>
+  </div>
+</div>
