@@ -13,8 +13,9 @@ defmodule CodingTrainingElixirWeb.Chapter6Live do
         result = print(r.remain_age, r.year, r.retire_year)
         socket = assign(socket, result: result)
         {:noreply, socket}
+
       {:error, msg} ->
-        IO.inspect msg
+        IO.inspect(msg)
         socket = assign(socket, result: msg)
         {:noreply, socket}
     end
@@ -26,7 +27,8 @@ defmodule CodingTrainingElixirWeb.Chapter6Live do
 
   def calc(age, retire) do
     remain_age = retire - age
-    year = Date.utc_today().year
+    {:ok, datetime} = DateTime.now("Asia/Seoul", Tzdata.TimeZoneDatabase)
+    year = datetime.year
     retire_year = year + remain_age
     {:ok, %{remain_age: remain_age, year: year, retire_year: retire_year}}
   end
@@ -36,20 +38,15 @@ defmodule CodingTrainingElixirWeb.Chapter6Live do
          {retire, ""} <- Integer.parse(retire_input),
          true <- age > 0,
          true <- retire > 0,
-         :ok <- minus_check(age, retire) do
+         :ok <- is_after_retire(age, retire) do
       {:ok, {age, retire}}
     else
       :error -> {:error, "숫자가 아닌 값이 입력되었습니다."}
-      :minus -> {:error, "은퇴 나이가 지났습니다."}
+      :after_retire -> {:error, "은퇴 나이가 지났습니다."}
       _ -> {:error, "0 또는 음수 값 입력되었습니다."}
     end
   end
-  
-  def minus_check(age, retire) when age > retire do
-    :minus
-  end
-  
-  def minus_check(_, _) do
-    :ok
-  end
+
+  def is_after_retire(age, retire) when age <= retire, do: :ok
+  def is_after_retire(_, _), do: :after_retire
 end

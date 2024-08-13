@@ -63,16 +63,23 @@
       <div class="w-full sm:w-auto">
         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-3">
           <.link
+            href={~p"/chapter6"}
+            class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
+          >
+            <span class="absolute inset-0 rounded-2xl bg-zinc-50 transition group-hover:bg-zinc-100 sm:group-hover:scale-105">
+            </span>
+            <span class="relative flex items-center gap-4 sm:flex-col">
+              <.icon name="hero-calendar" /> Ch6 퇴직 계산기
+            </span>
+          </.link>
+          <.link
             href={~p"/chapter5"}
             class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
           >
             <span class="absolute inset-0 rounded-2xl bg-zinc-50 transition group-hover:bg-zinc-100 sm:group-hover:scale-105">
             </span>
             <span class="relative flex items-center gap-4 sm:flex-col">
-              <svg id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" class="h-6 w-6">
-                <path d="m13,11h11v2h-11v11h-2v-11H0v-2h11V0h2v11Zm3,7h8v-2h-8v2Zm0,4h8v-2h-8v2ZM8,4H0v2h8v-2Zm13,0V1h-2v3h-3v2h3v3h2v-3h3v-2h-3ZM7.062,15.523l-2.562,2.562-2.562-2.562-1.414,1.414,2.562,2.562-2.562,2.562,1.414,1.414,2.562-2.562,2.562,2.562,1.414-1.414-2.562-2.562,2.562-2.562-1.414-1.414Z" />
-              </svg>
-              Ch5 간단한 수학
+              <.icon name="hero-calculator" /> Ch5 간단한 수학
             </span>
           </.link>
           <.link
