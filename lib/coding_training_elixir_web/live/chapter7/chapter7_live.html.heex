@@ -3,14 +3,22 @@
   <h1>Chapter 7 직사각형 방의 면적</h1>
   <form phx-change="input-change" class="flex flex-col my-3">
     <div>
-      <.label for="age">
-        방의 길이는? (피트) <.input type="text" name="length" value="" />
+      <.label for="unit">
+        <.input
+          id="unit"
+          label="단위?"
+          type="select"
+          name="unit"
+          options={@unit_options}
+          value=""
+        />
       </.label>
     </div>
     <div>
-      <.label for="retire">
-        방의 폭은? (피트) <.input type="text" name="width" value="" />
-      </.label>
+      <.input id="length" label="방의 길이는?" type="number" name="length" value="" />
+    </div>
+    <div>
+      <.input id="width" label="방의 폭은?" type="number" name="width" value="" />
     </div>
   </form>
   <div class="p-8 m-8 flex mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
