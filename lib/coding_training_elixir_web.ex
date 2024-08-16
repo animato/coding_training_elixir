@@ -87,6 +87,8 @@ defmodule CodingTrainingElixirWeb do
       import CodingTrainingElixirWeb.CoreComponents
       import CodingTrainingElixirWeb.Gettext
 
+      import CodingTrainingElixirWeb.MyComponents
+
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
 

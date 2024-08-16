@@ -62,52 +62,27 @@
     <div class="flex">
       <div class="w-full sm:w-auto">
         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-3">
-          <.link
-            href={~p"/chapter6"}
-            class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
-          >
-            <span class="absolute inset-0 rounded-2xl bg-zinc-50 transition group-hover:bg-zinc-100 sm:group-hover:scale-105">
-            </span>
-            <span class="relative flex items-center gap-4 sm:flex-col">
-              <.icon name="hero-calendar" /> Ch6 퇴직 계산기
-            </span>
-          </.link>
-          <.link
-            href={~p"/chapter5"}
-            class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
-          >
-            <span class="absolute inset-0 rounded-2xl bg-zinc-50 transition group-hover:bg-zinc-100 sm:group-hover:scale-105">
-            </span>
-            <span class="relative flex items-center gap-4 sm:flex-col">
-              <.icon name="hero-calculator" /> Ch5 간단한 수학
-            </span>
-          </.link>
-          <.link
-            href={~p"/chapter3"}
-            class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
-          >
-            <span class="absolute inset-0 rounded-2xl bg-zinc-50 transition group-hover:bg-zinc-100 sm:group-hover:scale-105">
-            </span>
-            <span class="relative flex items-center gap-4 sm:flex-col">
-              <svg id="Outline" viewBox="0 0 24 24" class="h-6 w-6">
-                <path d="M8,4H4A4,4,0,0,0,0,8v4a2,2,0,0,0,2,2H7.91A6.006,6.006,0,0,1,2,19a1,1,0,0,0,0,2,8.009,8.009,0,0,0,8-8V6A2,2,0,0,0,8,4Z" /><path d="M22,4H18a4,4,0,0,0-4,4v4a2,2,0,0,0,2,2h5.91A6.006,6.006,0,0,1,16,19a1,1,0,0,0,0,2,8.009,8.009,0,0,0,8-8V6A2,2,0,0,0,22,4Z" />
-              </svg>
-              Ch3 따옴표 출력
-            </span>
-          </.link>
-          <.link
-            href={~p"/chapter2"}
-            class="group relative rounded-2xl px-6 py-4 text-sm font-semibold leading-6 text-zinc-900 sm:py-6"
-          >
-            <span class="absolute inset-0 rounded-2xl bg-zinc-50 transition group-hover:bg-zinc-100 sm:group-hover:scale-105">
-            </span>
-            <span class="relative flex items-center gap-4 sm:flex-col">
-              <svg id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" class="h-6 w-6">
-                <path d="m19.019-.077H5.019C2.262-.077.019,2.166.019,4.923v14c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V4.923C24.019,2.166,21.776-.077,19.019-.077Zm-.657,18.956c-.113.041-.229.061-.343.061-.408,0-.792-.252-.939-.658l-1.197-3.282h-7.726l-1.197,3.282c-.189.519-.763.785-1.282.597-.519-.189-.786-.763-.597-1.282l3.831-10.5c.471-1.327,1.692-2.19,3.109-2.19s2.639.863,3.112,2.198l3.827,10.492c.189.519-.078,1.093-.597,1.282Zm-5.112-11.097l1.903,5.218h-6.267l1.906-5.226c.286-.805,1.012-.867,1.227-.867s.942.062,1.23.875Z" />
-              </svg>
-              Ch2 글자 수 세기
-            </span>
-          </.link>
+          <.chapter href={~p"/chapter7"} icon_name="hero-square-3-stack-3d">
+            Ch7 직사각형 방의 면적
+          </.chapter>
+          <.chapter href={~p"/chapter6"} icon_name="hero-calendar">
+            Ch6 퇴직 계산기
+          </.chapter>
+          <.chapter href={~p"/chapter6"} icon_name="hero-calculator">
+            Ch5 간단한 수학
+          </.chapter>
+          <.chapter href={~p"/chapter3"}>
+            <svg id="Outline" viewBox="0 0 24 24" class="h-6 w-6">
+              <path d="M8,4H4A4,4,0,0,0,0,8v4a2,2,0,0,0,2,2H7.91A6.006,6.006,0,0,1,2,19a1,1,0,0,0,0,2,8.009,8.009,0,0,0,8-8V6A2,2,0,0,0,8,4Z" /><path d="M22,4H18a4,4,0,0,0-4,4v4a2,2,0,0,0,2,2h5.91A6.006,6.006,0,0,1,16,19a1,1,0,0,0,0,2,8.009,8.009,0,0,0,8-8V6A2,2,0,0,0,22,4Z" />
+            </svg>
+            Ch3 따옴표 출력
+          </.chapter>
+          <.chapter href={~p"/chapter2"}>
+            <svg id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" class="h-6 w-6">
+              <path d="m19.019-.077H5.019C2.262-.077.019,2.166.019,4.923v14c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V4.923C24.019,2.166,21.776-.077,19.019-.077Zm-.657,18.956c-.113.041-.229.061-.343.061-.408,0-.792-.252-.939-.658l-1.197-3.282h-7.726l-1.197,3.282c-.189.519-.763.785-1.282.597-.519-.189-.786-.763-.597-1.282l3.831-10.5c.471-1.327,1.692-2.19,3.109-2.19s2.639.863,3.112,2.198l3.827,10.492c.189.519-.078,1.093-.597,1.282Zm-5.112-11.097l1.903,5.218h-6.267l1.906-5.226c.286-.805,1.012-.867,1.227-.867s.942.062,1.23.875Z" />
+            </svg>
+            Ch2 글자 수 세기
+          </.chapter>
           <%!--           
           <a
             href={"https://github.com/phoenixframework/phoenix/blob/v#{Application.spec(:phoenix, :vsn)}/CHANGELOG.md"}
