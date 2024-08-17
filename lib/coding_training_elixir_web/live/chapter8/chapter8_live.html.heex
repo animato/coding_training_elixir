@@ -1,0 +1,26 @@
+<.flash_group flash={@flash} />
+<div>
+  <h1>Chapter 8 피자 파티</h1>
+  <form phx-change="input-change" class="flex flex-col my-3">
+    <.input id="people" label="사람이 몇명입니까?" type="number" name="people" value="" />
+    <.input
+      id="pizzas"
+      label="가지고 있는 피자는 몇 판 입니까?"
+      type="number"
+      name="pizzas"
+      value=""
+    />
+    <.input
+      id="pieces"
+      label="피자는 한판에 몇 조각 입니까?"
+      type="number"
+      name="pieces"
+      value=""
+    />
+  </form>
+  <div class="p-8 m-8 flex mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
+    <p class="text-xl">
+      <%= raw(@result) %>
+    </p>
+  </div>
+</div>
