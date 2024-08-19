@@ -29,9 +29,14 @@ defmodule CodingTrainingElixirWeb.Chapter8Live do
     end
   end
 
+  def pluralize("person", 1), do: "1 person"
+  def pluralize("person", count), do: "#{count} people"
+  def pluralize(word, 1), do: "1 #{word}"
+  def pluralize(word, count), do: "#{count} #{word}s"
+
   def print(people, pizzas, gets, leftover) do
-    "#{people} people with #{pizzas} pizzas <br/>
-     Each person gets #{gets} pieces of pizza. <br/>
+    "#{pluralize("person", people)} with #{pluralize("pizza", pizzas)} <br/>
+     Each person gets #{pluralize("piece", gets)} of pizza. <br/>
      There are #{leftover} leftover pieces.
     "
   end
