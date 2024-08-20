@@ -1,11 +1,13 @@
 defmodule CodingTrainingElixirWeb.Chapter8Live do
   use CodingTrainingElixirWeb, :live_view
-  @convert_value 0.09290304
-  @feet "feet"
-  @meter "meter"
 
   def mount(_params, _session, socket) do
-    socket = assign(socket, result: "결과가 여기에 나타납니다", unit_options: [피트: @feet, 미터: @meter])
+    socket =
+      assign(socket,
+        result: "결과가 여기에 나타납니다",
+        result2: "결과가 여기에 나타납니다"
+      )
+
     {:ok, socket}
   end
 
@@ -21,6 +23,25 @@ defmodule CodingTrainingElixirWeb.Chapter8Live do
         leftover = rem(total, people)
         result = print(people, pizzas, gets, leftover)
         socket = assign(socket, result: result)
+        {:noreply, socket}
+
+      {:error, msg} ->
+        IO.inspect("??")
+        socket = assign(socket, result: msg)
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event(
+        "input-change2",
+        %{"people" => people, "wanted" => wanted, "pieces" => pieces},
+        socket
+      ) do
+    case valid(people, wanted, pieces) do
+      {:ok, {people, wanted, pieces}} ->
+        count = calculate(people * wanted, pieces)
+        result = print2(count)
+        socket = assign(socket, result2: result)
         {:noreply, socket}
 
       {:error, msg} ->
@@ -53,5 +74,15 @@ defmodule CodingTrainingElixirWeb.Chapter8Live do
       :error -> {:error, "숫자가 아닌 값이 입력되었습니다."}
       _ -> {:error, "0 또는 음수 값 입력되었습니다."}
     end
+  end
+
+  def calculate(needed, pieces) do
+    div = div(needed, pieces)
+    rem = rem(needed, pieces)
+    div + if rem > 0, do: 1, else: 0
+  end
+
+  def print2(count) do
+    "구매해야 하는 피자 수 #{count}"
   end
 end
