@@ -1,0 +1,27 @@
+<.flash_group flash={@flash} />
+<div>
+  <h1>Chapter 9 페인트 계산기</h1>
+  <form phx-change="input-change" class="flex flex-col my-3">
+    <div>
+      <.input
+        id="unit"
+        label="단위?"
+        type="select"
+        name="unit"
+        options={@unit_options}
+        value=""
+      />
+    </div>
+    <div>
+      <.input id="length" label="방의 길이는?" type="number" name="length" value="" />
+    </div>
+    <div>
+      <.input id="width" label="방의 폭은?" type="number" name="width" value="" />
+    </div>
+  </form>
+  <div class="p-8 m-8 flex mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
+    <p class="text-xl">
+      <%= raw(@result) %>
+    </p>
+  </div>
+</div>
