@@ -1,22 +1,25 @@
 defmodule CodingTrainingElixirWeb.Chapter9Live do
   use CodingTrainingElixirWeb, :live_view
   @paint 9
-  @meter "meter"
+  @rectangle "rectangle"
+  @ellipse "ellipse"
 
   def mount(_params, _session, socket) do
-    socket = assign(socket, result: "결과가 여기에 나타납니다", unit_options: [미터: @meter])
+    socket =
+      assign(socket, result: "결과가 여기에 나타납니다", shape_options: [사각형: @rectangle, 타원: @ellipse])
+
     {:ok, socket}
   end
 
   def handle_event(
         "input-change",
-        %{"length" => length, "width" => width, "unit" => unit},
+        %{"length" => length, "width" => width, "shape" => shape},
         socket
       ) do
     case valid(length, width) do
-      {:ok, {l, w}} ->
-        area = l * w
-        liter = Float.ceil(area / @paint) |> trunc
+      {:ok, {length, width}} ->
+        area = area(length, width, shape)
+        liter = calc_paint(area)
         result = print(liter, area)
         socket = assign(socket, result: result)
         {:noreply, socket}
@@ -25,6 +28,18 @@ defmodule CodingTrainingElixirWeb.Chapter9Live do
         socket = assign(socket, result: msg)
         {:noreply, socket}
     end
+  end
+
+  def calc_paint(area) do
+    Float.ceil(area / @paint) |> trunc
+  end
+
+  def area(length, width, shape) when shape == @ellipse do
+    length / 2 * (width / 2) * :math.pi()
+  end
+
+  def area(length, width, shape) when shape == @rectangle do
+    length * width
   end
 
   def print(liter, area) do
