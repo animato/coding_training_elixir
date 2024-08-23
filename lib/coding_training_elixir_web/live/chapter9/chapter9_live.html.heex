@@ -20,8 +20,8 @@
     </div>
   </form>
   <div class="p-8 m-8 flex mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
-    <p class="text-xl">
-      <%= raw(@result) %>
+    <p :if={@liter > 0} class="text-xl">
+      당신은 <%= @area %> 제곱미터의 방을 칠하기 위해 <%= @liter %> 리터의 페인트가 필요합니다.
     </p>
   </div>
 </div>
