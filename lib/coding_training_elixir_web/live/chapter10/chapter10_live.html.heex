@@ -10,9 +10,15 @@
     <.input label="상품 3의 수량?" type="number" name="item3[quantity]" value="" />
     <.button type="submit">계산!</.button>
   </form>
-  <div class="p-8 m-8 flex mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
+  <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
     <p class="text-xl">
-      <%= @result %>
+      Subtotal: <%= @result.subtotal %>
+    </p>
+    <p class="text-xl">
+      Tax: <%= @result.tax %>
+    </p>
+    <p class="text-xl">
+      Total: <%= @result.total %>
     </p>
   </div>
 </div>
