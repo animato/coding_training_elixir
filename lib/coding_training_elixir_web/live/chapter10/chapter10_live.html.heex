@@ -2,12 +2,20 @@
 <div>
   <h1>Chapter 10 셀프계산대</h1>
   <form phx-submit="input-submit" class="flex flex-col my-3">
-    <.input label="상품 1의 가격?" type="number" name="item1[price]" value="" />
-    <.input label="상품 1의 수량?" type="number" name="item1[quantity]" value="" />
-    <.input label="상품 2의 가격?" type="number" name="item2[price]" value="" />
-    <.input label="상품 2의 수량?" type="number" name="item2[quantity]" value="" />
-    <.input label="상품 3의 가격?" type="number" name="item3[price]" value="" />
-    <.input label="상품 3의 수량?" type="number" name="item3[quantity]" value="" />
+    <%= for {item, index} <- Enum.with_index(@items) do %>
+      <.input
+        label={"상품 #{index + 1}의 가격?"}
+        type="number"
+        name={"item[#{index}][price]"}
+        value={item.price}
+      />
+      <.input
+        label={"상품 #{index + 1}의 수량?"}
+        type="number"
+        name={"item[#{index}][quantity]"}
+        value={item.quantity}
+      />
+    <% end %>
     <.button type="submit">계산!</.button>
   </form>
   <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
