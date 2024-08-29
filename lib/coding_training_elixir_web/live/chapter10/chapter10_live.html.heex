@@ -1,7 +1,7 @@
 <.flash_group flash={@flash} />
 <div>
   <h1>Chapter 10 셀프계산대</h1>
-  <form phx-submit="input-submit" class="flex flex-col my-3">
+  <form phx-change="validate" phx-submit="input-submit" class="flex flex-col my-3">
     <%= for {item, index} <- Enum.with_index(@items) do %>
       <.input
         label={"상품 #{index + 1}의 가격?"}
@@ -16,7 +16,10 @@
         value={item.quantity}
       />
     <% end %>
-    <.button type="submit">계산!</.button>
+    <div class="flex justify-between">
+      <.button type="button" phx-click="add">추가</.button>
+      <.button type="submit">계산!</.button>
+    </div>
   </form>
   <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
     <p class="text-xl">

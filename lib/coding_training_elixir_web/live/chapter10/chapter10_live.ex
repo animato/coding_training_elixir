@@ -10,6 +10,20 @@ defmodule CodingTrainingElixirWeb.Chapter10Live do
     {:ok, socket}
   end
 
+  def handle_event("add", _, socket) do
+    items = socket.assigns.items ++ [%{price: nil, quantity: nil}]
+    socket = assign(socket, items: items)
+    {:noreply, socket}
+  end
+
+  def handle_event("validate", %{"item" => items}, socket) do
+    list =
+      Enum.map(items, fn {_, value} -> %{price: value["price"], quantity: value["quantity"]} end)
+
+    socket = assign(socket, items: list)
+    {:noreply, socket}
+  end
+
   def handle_event(
         "input-submit",
         %{"item" => items},
