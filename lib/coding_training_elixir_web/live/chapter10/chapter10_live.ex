@@ -29,11 +29,7 @@ defmodule CodingTrainingElixirWeb.Chapter10Live do
         %{"item" => items},
         socket
       ) do
-    # IO.inspect(items)
-
     list = Enum.map(items, fn {_, value} -> value end)
-
-    # IO.inspect(list)
 
     subtotal =
       Enum.map(list, fn x -> String.to_integer(x["price"]) * String.to_integer(x["quantity"]) end)
