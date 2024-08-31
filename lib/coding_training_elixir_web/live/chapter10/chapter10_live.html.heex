@@ -6,15 +6,17 @@
       <.input
         label={"상품 #{index + 1}의 가격?"}
         type="number"
-        name={"item[#{index}][price]"}
-        value={item.price}
+        name={"item[#{index}][#{item.price_or_quantity}]"}
+        value={item.value}
+        errors={item.errors}
       />
-      <.input
+      <%!-- <.input
         label={"상품 #{index + 1}의 수량?"}
         type="number"
         name={"item[#{index}][quantity]"}
         value={item.quantity}
-      />
+        errors={item.errors}
+      /> --%>
     <% end %>
     <div class="flex justify-between">
       <.button type="button" phx-click="add" class="flex items-center mt-2">
