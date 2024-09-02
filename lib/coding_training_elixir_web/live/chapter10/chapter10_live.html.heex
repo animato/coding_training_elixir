@@ -3,20 +3,23 @@
   <h1>Chapter 10 셀프계산대</h1>
   <form phx-change="validate" phx-submit="input-submit" class="flex flex-col my-3">
     <%= for {item, index} <- Enum.with_index(@items) do %>
-      <.input
-        label={"상품 #{index + 1}의 가격?"}
-        type="number"
-        name={"item[#{index}][#{item.price_or_quantity}]"}
-        value={item.value}
-        errors={item.errors}
-      />
-      <%!-- <.input
-        label={"상품 #{index + 1}의 수량?"}
-        type="number"
-        name={"item[#{index}][quantity]"}
-        value={item.quantity}
-        errors={item.errors}
-      /> --%>
+      <div class="flex">
+        <.input
+          label={"상품 #{index + 1}의 가격?"}
+          type="number"
+          name={"item[#{index}][price]"}
+          value={item.price}
+          errors={item.price_errors}
+          class="my-20"
+        />
+        <.input
+          label={"상품 #{index + 1}의 수량?"}
+          type="number"
+          name={"item[#{index}][quantity]"}
+          value={item.quantity}
+          errors={item.quantity_errors}
+        />
+      </div>
     <% end %>
     <div class="flex justify-between">
       <.button type="button" phx-click="add" class="flex items-center mt-2">
