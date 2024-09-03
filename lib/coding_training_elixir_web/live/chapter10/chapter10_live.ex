@@ -11,7 +11,7 @@ defmodule CodingTrainingElixirWeb.Chapter10Live do
         Map.new(item)
       end)
 
-    socket = assign(socket, items: items, result: %{subtotal: 0, tax: 0, total: 0})
+    socket = assign(socket, items: items, valid: false, result: %{subtotal: 0, tax: 0, total: 0})
 
     {:ok, socket}
   end
@@ -24,8 +24,6 @@ defmodule CodingTrainingElixirWeb.Chapter10Live do
   end
 
   def handle_event("validate", %{"item" => items}, socket) do
-    IO.inspect(items)
-
     list =
       Enum.map(items, fn {_, value} ->
         %{"price" => price, "quantity" => quantity} = value
@@ -50,7 +48,12 @@ defmodule CodingTrainingElixirWeb.Chapter10Live do
         }
       end)
 
-    socket = assign(socket, items: list)
+    valid =
+      Enum.all?(list, fn item ->
+        item.price_errors == [] and item.quantity_errors == []
+      end)
+
+    socket = assign(socket, items: list, valid: valid)
     {:noreply, socket}
   end
 

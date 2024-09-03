@@ -1,31 +1,36 @@
 <.flash_group flash={@flash} />
 <div>
   <h1>Chapter 10 셀프계산대</h1>
-  <form phx-change="validate" phx-submit="input-submit" class="flex flex-col my-3">
+  <form phx-change="validate" phx-submit="input-submit" class="flex flex-col my-5">
     <%= for {item, index} <- Enum.with_index(@items) do %>
       <div class="flex">
-        <.input
-          label={"상품 #{index + 1}의 가격?"}
-          type="number"
-          name={"item[#{index}][price]"}
-          value={item.price}
-          errors={item.price_errors}
-          class="my-20"
-        />
-        <.input
-          label={"상품 #{index + 1}의 수량?"}
-          type="number"
-          name={"item[#{index}][quantity]"}
-          value={item.quantity}
-          errors={item.quantity_errors}
-        />
+        <div class="flex-1 me-5">
+          <.input
+            label={"상품 #{index + 1}의 가격?"}
+            type="number"
+            name={"item[#{index}][price]"}
+            value={item.price}
+            errors={item.price_errors}
+          />
+        </div>
+
+        <div class="flex-1">
+          <.input
+            label={"상품 #{index + 1}의 수량?"}
+            type="number"
+            name={"item[#{index}][quantity]"}
+            value={item.quantity}
+            errors={item.quantity_errors}
+            class="flex-1"
+          />
+        </div>
       </div>
     <% end %>
-    <div class="flex justify-between">
-      <.button type="button" phx-click="add" class="flex items-center mt-2">
+    <div class="flex justify-between mt-5">
+      <.button type="button" phx-click="add" class="flex items-center">
         <.icon name="hero-plus" class="w-3 h-3 mr-1" />추가
       </.button>
-      <.button type="submit" class="mt-2">계산!</.button>
+      <.button type="submit" disabled={!@valid}>계산!</.button>
     </div>
   </form>
   <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
