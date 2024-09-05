@@ -50,18 +50,23 @@ defmodule CodingTrainingElixirWeb.Chapter10Live do
         %{"item" => items},
         socket
       ) do
-    list = Enum.map(items, fn {_, value} -> value end)
-
     subtotal =
-      Enum.map(list, fn x -> String.to_integer(x["price"]) * String.to_integer(x["quantity"]) end)
-      |> Enum.sum()
+      Enum.reduce(items, 0, fn {_, %{"price" => price, "quantity" => quantity}}, acc ->
+        {p, _} = Integer.parse(price)
+        {q, _} = Integer.parse(quantity)
+        p * q + acc
+      end)
 
-    tax = subtotal * @tax_rate / 100
-
+    tax = calc_tax(subtotal)
     total = subtotal + tax
+
     socket = assign(socket, :result, %{subtotal: subtotal, tax: tax, total: total})
 
     {:noreply, socket}
+  end
+
+  def calc_tax(total) do
+    total * @tax_rate / 100
   end
 
   def error_message(price) do
@@ -78,7 +83,7 @@ defmodule CodingTrainingElixirWeb.Chapter10Live do
   def valid_integer(string) do
     case Integer.parse(string) do
       {number, ""} when number > 0 -> {:ok, number}
-      {_number, ""} -> {:error, "0 또는 음수 값이 입력되었습니다."}
+      {_, ""} -> {:error, "0 또는 음수 값이 입력되었습니다."}
       _ -> {:error, "숫자가 아닌 값이 입력되었습니다."}
     end
   end
