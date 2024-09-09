@@ -12,7 +12,17 @@
           errors={@amount_from_error}
         />
       </div>
-      <div class="flex-1">
+      <div class="flex-1 me-5">
+        <.input
+          id="unit"
+          label="국가?"
+          type="select"
+          name="country"
+          options={@country}
+          value=""
+        />
+      </div>
+      <%!-- <div class="flex-1">
         <.input
           label="What is the exchange rate?"
           type="number"
@@ -21,7 +31,7 @@
           value=""
           errors={@rate_from_error}
         />
-      </div>
+      </div> --%>
     </div>
     <div class="flex justify-end mt-5">
       <.button type="submit" disabled={!@valid}>계산!</.button>
