@@ -1,7 +1,9 @@
 defmodule CodingTrainingElixirWeb.Chapter11Live do
   use CodingTrainingElixirWeb, :live_view
   @rate_to 100
-  @country ["USD", "KRW", "EUR"]
+  @country ["미국": "USD", "대한민국": "KRW", "유럽연합": "EUR"]
+  @rate_table %{"USD" => %{rate: 137.51, name: "dollars"}, "EUR" => %{rate: 100, name: "Euros"}, "KRW" => %{rate: 148_311, name: "원"}}
+
 
   def mount(_params, _session, socket) do
     socket =
@@ -10,7 +12,7 @@ defmodule CodingTrainingElixirWeb.Chapter11Live do
         country: @country,
         amount_from_error: [],
         rate_from_error: [],
-        result: %{amount_from: 0, rate_from: 0, amount_to: 0}
+        result: %{amount_from: 0, rate_from: 0, amount_to: 0, name: ""}
       )
 
     {:ok, socket}
@@ -28,7 +30,6 @@ defmodule CodingTrainingElixirWeb.Chapter11Live do
       assign(socket,
         valid: amount_from_error == [],
         amount_from_error: amount_from_error
-        # rate_from_error: rate_from_error
       )
 
     {:noreply, socket}
@@ -41,15 +42,14 @@ defmodule CodingTrainingElixirWeb.Chapter11Live do
       ) do
     {a, ""} = Integer.parse(amount_from)
 
-    rate_table = %{"USD" => 137.51, "EUR" => 100, "KRW" => 148_311}
-    rate_from = rate_table[country]
-
-    IO.inspect(rate_from)
+    rate_info = @rate_table[country]
+    rate_from = rate_info.rate
+    name = rate_info.name
 
     amount_to = calculate(a, rate_from) |> Float.ceil(2)
 
     socket =
-      assign(socket, :result, %{amount_from: a, rate_from: rate_from, amount_to: amount_to})
+      assign(socket, :result, %{amount_from: a, rate_from: rate_from, amount_to: amount_to, name: name})
 
     {:noreply, socket}
   end
