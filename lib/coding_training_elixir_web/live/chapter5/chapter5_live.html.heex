@@ -1,16 +1,24 @@
 <.flash_group flash={@flash} />
 <div>
   <h1>Chapter 5 간단한 수학</h1>
-  <form phx-change="input-change" class="flex flex-col my-3">
-    <div>
-      <.label for="number1">
-        첫번째 숫자를 입력하세요 <.input type="text" name="number1" value="" />
-      </.label>
+  <form phx-change="input-change" class="flex justify-between my-3">
+    <div class="flex-1 mr-3">
+      <.input
+        label="첫번째 숫자를 입력하세요"
+        type="text"
+        name="number1"
+        value={@values["number1"]}
+        errors={@errors["number1"]}
+      />
     </div>
-    <div>
-      <.label for="number2">
-        두번재 숫자를 입력하세요 <.input type="text" name="number2" value="" />
-      </.label>
+    <div class="flex-1">
+      <.input
+        label="두번재 숫자를 입력하세요"
+        type="text"
+        name="number2"
+        value={@values["number2"]}
+        errors={@errors["number2"]}
+      />
     </div>
   </form>
   <div class="p-8 m-8 flex mx-auto bg-white rounded-xl shadow-lg max-w-sm mx-auto">
