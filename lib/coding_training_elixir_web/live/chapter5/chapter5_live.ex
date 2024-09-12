@@ -1,10 +1,11 @@
 defmodule CodingTrainingElixirWeb.Chapter5Live do
   use CodingTrainingElixirWeb, :live_view
+  @init_message "결과가 여기에 나타납니다"
 
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
-        result: "결과가 여기에 나타납니다",
+        result: @init_message,
         values: %{"number1" => nil, "number2" => nil},
         errors: %{"number1" => [], "number2" => []}
       )
@@ -12,55 +13,32 @@ defmodule CodingTrainingElixirWeb.Chapter5Live do
     {:ok, socket}
   end
 
-  def handle_event("input-change", %{"number1" => number1, "number2" => number2}, socket) do
-    case {valid_integer(number1), valid_integer(number2)} do
-      {{:ok, n1}, {:ok, n2}} ->
-        result =
-          ["+", "-", "*", "/"]
-          |> Enum.map(fn x -> calc(x, n1, n2) end)
-          |> Enum.map(fn x -> print(x) end)
-          |> Enum.join("<br/>")
+  def handle_event("input-change", %{"number1" => number1, "number2" => number2} = params, socket) do
+    {valid_result1, valid_result2} = {valid_integer(number1), valid_integer(number2)}
 
-        socket =
-          assign(socket,
-            result: result,
-            values: %{"number1" => number1, "number2" => number2},
-            errors: %{"number1" => [], "number2" => []}
-          )
+    errors = collect_error({valid_result1, valid_result2})
+    values = calculate_value({valid_result1, valid_result2})
 
-        {:noreply, socket}
-
-      {{:error, msg1}, {:error, msg2}} ->
-        socket =
-          assign(socket,
-            result: "결과가 여기에 나타납니다",
-            values: %{"number1" => number1, "number2" => number2},
-            errors: %{"number1" => [msg1], "number2" => [msg2]}
-          )
-
-        {:noreply, socket}
-
-      {{:error, msg}, _} ->
-        socket =
-          assign(socket,
-            result: "결과가 여기에 나타납니다",
-            values: %{"number1" => number1, "number2" => number2},
-            errors: %{"number1" => [msg], "number2" => []}
-          )
-
-        {:noreply, socket}
-
-      {_, {:error, msg}} ->
-        socket =
-          assign(socket,
-            result: "결과가 여기에 나타납니다",
-            values: %{"number1" => number1, "number2" => number2},
-            errors: %{"number1" => [], "number2" => [msg]}
-          )
-
-        {:noreply, socket}
-    end
+    socket = assign(socket, result: values, values: params, errors: errors)
+    {:noreply, socket}
   end
+
+  def calculate_value({{:ok, n1}, {:ok, n2}}) do
+    ["+", "-", "*", "/"]
+    |> Enum.map(fn x -> calc(x, n1, n2) end)
+    |> Enum.map(fn x -> print(x) end)
+    |> Enum.join("<br/>")
+  end
+
+  def calculate_value({_, _}), do: @init_message
+
+  def collect_error({{:ok, _}, {:ok, _}}), do: %{"number1" => [], "number2" => []}
+
+  def collect_error({{:error, msg1}, {:error, msg2}}),
+    do: %{"number1" => [msg1], "number2" => [msg2]}
+
+  def collect_error({{:error, msg}, {_, _}}), do: %{"number1" => [msg], "number2" => []}
+  def collect_error({{_, _}, {:error, msg}}), do: %{"number1" => [], "number2" => [msg]}
 
   def print({op, n1, n2, val}) do
     case op do
