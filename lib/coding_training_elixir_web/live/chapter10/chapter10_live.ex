@@ -45,46 +45,33 @@ defmodule CodingTrainingElixirWeb.Chapter10Live do
     {:noreply, socket}
   end
 
-  def handle_event(
-        "input-submit",
-        %{"item" => items},
-        socket
-      ) do
-    subtotal =
-      Enum.reduce(items, 0, fn {_, %{"price" => price, "quantity" => quantity}}, acc ->
-        {p, _} = Integer.parse(price)
-        {q, _} = Integer.parse(quantity)
-        p * q + acc
-      end)
-
+  def handle_event("input-submit", %{"item" => items}, socket) do
+    subtotal = calc_subtotal(items)
     tax = calc_tax(subtotal)
     total = subtotal + tax
 
     socket = assign(socket, :result, %{subtotal: subtotal, tax: tax, total: total})
-
     {:noreply, socket}
   end
 
+  def calc_subtotal(items) do
+    Enum.reduce(items, 0, fn {_, %{"price" => price, "quantity" => quantity}}, acc ->
+      {p, _} = Integer.parse(price)
+      {q, _} = Integer.parse(quantity)
+      p * q + acc
+    end)
+  end
+  
   def calc_tax(total) do
     total * @tax_rate / 100
   end
 
+  def error_message(""), do: ["값이 입력되지 않았습니다."]
   def error_message(price) do
-    case valid_integer(price) do
-      {:error, msg} -> [msg]
-      _ -> []
-    end
-  end
-
-  def valid_integer(nil) do
-    {:error, "값이 입력되지 않았습니다."}
-  end
-
-  def valid_integer(string) do
-    case Integer.parse(string) do
-      {number, ""} when number > 0 -> {:ok, number}
-      {_, ""} -> {:error, "0 또는 음수 값이 입력되었습니다."}
-      _ -> {:error, "숫자가 아닌 값이 입력되었습니다."}
+    case Integer.parse(price) do
+      {number, ""} when number > 0 -> []
+      {_, ""} -> ["0 또는 음수 값이 입력되었습니다."]
+      _ -> ["숫자가 아닌 값이 입력되었습니다."]
     end
   end
 
