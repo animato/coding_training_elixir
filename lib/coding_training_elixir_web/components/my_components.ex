@@ -1,4 +1,7 @@
 defmodule CodingTrainingElixirWeb.MyComponents do
+  @moduledoc """
+  메인 페이지 챕터 링크 모듈
+  """
   use Phoenix.Component
   import CodingTrainingElixirWeb.CoreComponents
 

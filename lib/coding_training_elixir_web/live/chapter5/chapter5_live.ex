@@ -26,8 +26,7 @@ defmodule CodingTrainingElixirWeb.Chapter5Live do
   def calculate_value({{:ok, n1}, {:ok, n2}}) do
     ["+", "-", "*", "/"]
     |> Enum.map(fn x -> calc(x, n1, n2) end)
-    |> Enum.map(fn x -> print(x) end)
-    |> Enum.join("<br/>")
+    |> Enum.map_join("<br/>", fn x -> print(x) end)
   end
 
   def calculate_value({_, _}), do: @init_message

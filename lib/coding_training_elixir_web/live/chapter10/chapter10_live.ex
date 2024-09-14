@@ -61,12 +61,13 @@ defmodule CodingTrainingElixirWeb.Chapter10Live do
       p * q + acc
     end)
   end
-  
+
   def calc_tax(total) do
     total * @tax_rate / 100
   end
 
   def error_message(""), do: ["값이 입력되지 않았습니다."]
+
   def error_message(price) do
     case Integer.parse(price) do
       {number, ""} when number > 0 -> []

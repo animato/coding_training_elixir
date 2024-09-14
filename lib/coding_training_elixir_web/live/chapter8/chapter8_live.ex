@@ -26,7 +26,6 @@ defmodule CodingTrainingElixirWeb.Chapter8Live do
         {:noreply, socket}
 
       {:error, msg} ->
-        IO.inspect("??")
         socket = assign(socket, result: msg)
         {:noreply, socket}
     end

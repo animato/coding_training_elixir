@@ -4,26 +4,22 @@
   <h2>따옴표 출력</h2>
   <form phx-submit="input-submit" class="flex flex-col">
     <div>
-      <.label for="quote" class="w-24">
-        What is the quote?
-        <input type="text" name="quote" />
-      </.label>
+      <input label="What is the quote?" type="text" name="quote" />
     </div>
     <div>
-      <.label for="who" class="w-24">
-        Who said it?
-        <input type="text" name="who" />
-      </.label>
+      <input label="Who said it?" type="text" name="who" />
     </div>
     <div class="flex flex-row-reverse items-end">
       <.button type="submit">
-       제출
+        제출
       </.button>
     </div>
   </form>
   <div>
     <p>
-    Quote: <%= if String.length(@result) > 0 do @result end %>
+      Quote: <%= if String.length(@result) > 0 do
+        @result
+      end %>
     </p>
   </div>
 </div>

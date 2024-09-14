@@ -15,7 +15,6 @@ defmodule CodingTrainingElixirWeb.Chapter6Live do
         {:noreply, socket}
 
       {:error, msg} ->
-        IO.inspect(msg)
         socket = assign(socket, result: msg)
         {:noreply, socket}
     end
@@ -38,7 +37,7 @@ defmodule CodingTrainingElixirWeb.Chapter6Live do
          {retire, ""} <- Integer.parse(retire_input),
          true <- age > 0,
          true <- retire > 0,
-         :ok <- is_after_retire(age, retire) do
+         :ok <- after_retire?(age, retire) do
       {:ok, {age, retire}}
     else
       :error -> {:error, "숫자가 아닌 값이 입력되었습니다."}
@@ -47,6 +46,6 @@ defmodule CodingTrainingElixirWeb.Chapter6Live do
     end
   end
 
-  def is_after_retire(age, retire) when age <= retire, do: :ok
-  def is_after_retire(_, _), do: :after_retire
+  def after_retire?(age, retire) when age <= retire, do: :ok
+  def after_retire?(_, _), do: :after_retire
 end

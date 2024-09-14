@@ -1,7 +1,7 @@
 defmodule CodingTrainingElixirWeb.Chapter3Live do
   use CodingTrainingElixirWeb, :live_view
 
-  def mount(_params, session, socket) do
+  def mount(_params, _session, socket) do
     socket = assign(socket, result: "")
     {:ok, socket}
   end
