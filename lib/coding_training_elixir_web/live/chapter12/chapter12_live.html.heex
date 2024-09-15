@@ -37,7 +37,9 @@
   </form>
   <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
     <p class="text-xl">
-      <%= @result %>
+      <%= for text <- @result do %>
+        <%= text %><br />
+      <% end %>
     </p>
   </div>
 </div>

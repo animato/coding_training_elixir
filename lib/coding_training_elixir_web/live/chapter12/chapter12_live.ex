@@ -8,7 +8,7 @@ defmodule CodingTrainingElixirWeb.Chapter12Live do
         principal: %{value: nil, error: []},
         interest: %{value: nil, error: []},
         years: %{value: nil, error: []},
-        result: ""
+        result: []
       )
 
     {:ok, socket}
@@ -46,7 +46,7 @@ defmodule CodingTrainingElixirWeb.Chapter12Live do
         principal: principal,
         interest: interest,
         years: years,
-        result: ""
+        result: []
       )
 
     {:noreply, socket}
@@ -79,9 +79,12 @@ defmodule CodingTrainingElixirWeb.Chapter12Live do
       end
 
     result =
-      calculateSimpleInterest(principal.value, interest.value, years.value) |> Float.ceil(2)
+      Enum.map(1..years.value, fn year ->
+        calculate =
+          calculateSimpleInterest(principal.value, interest.value, year) |> Float.ceil(2)
 
-    result = "연 #{interest.value}%, #{years.value}년 후 #{result}를 얻게 됩니다."
+        "연 #{interest.value}%, #{year}년 후 #{calculate}를 얻게 됩니다."
+      end)
 
     socket =
       assign(socket,
