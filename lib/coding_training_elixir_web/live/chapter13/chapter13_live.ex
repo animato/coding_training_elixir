@@ -17,11 +17,6 @@ defmodule CodingTrainingElixirWeb.Chapter13Live do
 
   def handle_event("validate", params, socket) do
     socket = update_values(socket, params)
-    {:noreply, socket}
-  end
-
-  def handle_event("input-submit", params, socket) do
-    socket = update_values(socket, params)
 
     case socket.assigns.valid do
       true ->
@@ -51,10 +46,12 @@ defmodule CodingTrainingElixirWeb.Chapter13Live do
     years = validate_integer(years)
     compound = validate_integer(compound)
 
+    valid =
+      [principal.error, interest.error, years.error, compound.error]
+      |> Enum.all?(fn list -> list == [] end)
+
     assign(socket,
-      valid:
-        principal.error == [] and interest.error == [] and years.error == [] and
-          compound.error == [],
+      valid: valid,
       principal: principal,
       interest: interest,
       years: years,
