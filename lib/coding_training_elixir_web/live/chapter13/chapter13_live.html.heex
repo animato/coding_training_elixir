@@ -1,15 +1,15 @@
 <.flash_group flash={@flash} />
 <div>
   <h1>Chapter 12 복리 계산</h1>
-  <form phx-submit="input-submit" phx-change="validate" class="flex flex-col my-5">
+  <form phx-change="form1" class="flex flex-col my-5">
     <div class="flex flex-wrap">
       <div class="flex me-5">
         <.input
           label="원금을 입력하세요: "
           type="number"
           name="principal"
-          value={@principal.value}
-          errors={@principal.error}
+          value={@form1.principal.value}
+          errors={@form1.principal.error}
         />
       </div>
       <div class="flex me-5">
@@ -17,8 +17,8 @@
           label="이자를 퍼센트 단위로 입력하세요: "
           type="number"
           name="interest"
-          value={@interest.value}
-          errors={@interest.error}
+          value={@form1.interest.value}
+          errors={@form1.interest.error}
         />
       </div>
       <div class="flex me-5">
@@ -26,8 +26,8 @@
           label="기간을 연단위로 입력하세요: "
           type="number"
           name="years"
-          value={@years.value}
-          errors={@years.error}
+          value={@form1.years.value}
+          errors={@form1.years.error}
         />
       </div>
       <div class="flex me-5">
@@ -35,17 +35,64 @@
           label="compound: "
           type="number"
           name="compound"
-          value={@compound.value}
-          errors={@compound.error}
+          value={@form1.compound.value}
+          errors={@form1.compound.error}
         />
       </div>
     </div>
   </form>
   <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
     <p class="text-xl">
-      <%= for text <- @result do %>
+      <%= for text <- @result1 do %>
         <%= text %><br />
       <% end %>
+    </p>
+  </div>
+
+  <h2>도전 과제</h2>
+  <form phx-change="form2" class="flex flex-col my-5">
+    <div class="flex flex-wrap">
+      <div class="flex me-5">
+        <.input
+          label="목표 원리금을 입력하세요: "
+          type="number"
+          name="total"
+          value={@form2.total.value}
+          errors={@form2.total.error}
+        />
+      </div>
+      <div class="flex me-5">
+        <.input
+          label="이자를 퍼센트 단위로 입력하세요: "
+          type="number"
+          name="interest"
+          value={@form2.interest.value}
+          errors={@form2.interest.error}
+        />
+      </div>
+      <div class="flex me-5">
+        <.input
+          label="기간을 연단위로 입력하세요: "
+          type="number"
+          name="years"
+          value={@form2.years.value}
+          errors={@form2.years.error}
+        />
+      </div>
+      <div class="flex me-5">
+        <.input
+          label="compound: "
+          type="number"
+          name="compound"
+          value={@form2.compound.value}
+          errors={@form2.compound.error}
+        />
+      </div>
+    </div>
+  </form>
+  <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
+    <p class="text-xl">
+      <%= @result2 %><br />
     </p>
   </div>
 </div>
