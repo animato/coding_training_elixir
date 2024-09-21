@@ -26,7 +26,14 @@ defmodule CodingTrainingElixirWeb.Chapter13Live do
   end
 
   def handle_event("form1", params, socket) do
-    socket = update_values(socket, params)
+    fields = [
+      principal: &validate_integer/1,
+      interest: &validate_float/1,
+      years: &validate_integer/1,
+      compound: &validate_integer/1
+    ]
+
+    socket = update_values(socket, params, :form1, fields)
 
     case socket.assigns.form1.valid do
       true ->
@@ -46,7 +53,14 @@ defmodule CodingTrainingElixirWeb.Chapter13Live do
   end
 
   def handle_event("form2", params, socket) do
-    socket = update_values2(socket, params)
+    fields = [
+      total: &validate_integer/1,
+      interest: &validate_float/1,
+      years: &validate_integer/1,
+      compound: &validate_integer/1
+    ]
+
+    socket = update_values(socket, params, :form2, fields)
 
     case socket.assigns.form2.valid do
       true ->
@@ -65,56 +79,13 @@ defmodule CodingTrainingElixirWeb.Chapter13Live do
     end
   end
 
-  defp update_values(socket, %{
-         "interest" => interest,
-         "principal" => principal,
-         "years" => years,
-         "compound" => compound
-       }) do
-    principal = validate_integer(principal)
-    interest = validate_float(interest)
-    years = validate_integer(years)
-    compound = validate_integer(compound)
+  defp update_values(socket, params, form_name, fields) do
+    list = Enum.map(fields, fn {k, v} -> {k, v.(params[Atom.to_string(k)])} end)
 
-    valid =
-      [principal.error, interest.error, years.error, compound.error]
-      |> Enum.all?(fn list -> list == [] end)
+    map = list |> Enum.into(%{})
+    errors = list |> Enum.map(fn {_, v} -> v.error end) |> List.flatten()
 
-    assign(socket,
-      form1: %{
-        valid: valid,
-        principal: principal,
-        interest: interest,
-        years: years,
-        compound: compound
-      }
-    )
-  end
-
-  defp update_values2(socket, %{
-         "interest" => interest,
-         "total" => total,
-         "years" => years,
-         "compound" => compound
-       }) do
-    total = validate_integer(total)
-    interest = validate_float(interest)
-    years = validate_integer(years)
-    compound = validate_integer(compound)
-
-    valid =
-      [total.error, interest.error, years.error, compound.error]
-      |> Enum.all?(fn list -> list == [] end)
-
-    assign(socket,
-      form2: %{
-        valid: valid,
-        total: total,
-        interest: interest,
-        years: years,
-        compound: compound
-      }
-    )
+    assign(socket, form_name, Map.put(map, :valid, errors == []))
   end
 
   def validate_integer(string) do
