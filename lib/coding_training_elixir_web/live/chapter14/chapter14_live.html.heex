@@ -1,0 +1,34 @@
+<.flash_group flash={@flash} />
+<div>
+  <h1>Chapter 14 세금 계산기</h1>
+
+  <p>주 이름이 'WI' 인 경우 세율은 5.5%</p>
+  <form phx-change="form1" class="flex flex-col my-5">
+    <div class="flex flex-wrap">
+      <div class="flex me-5">
+        <.input
+          label="주문 금액은? "
+          type="number"
+          name="order"
+          value={@form1.order.value}
+          errors={@form1.order.error}
+        />
+      </div>
+      <div class="flex me-5">
+        <.input
+          label="주 이름은? "
+          type="text"
+          name="state"
+          value={@form1.state.value}
+          errors={@form1.state.error}
+        />
+      </div>
+    </div>
+  </form>
+
+  <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
+    <p class="text-xl">
+      <%= raw(@result1) %>
+    </p>
+  </div>
+</div>
