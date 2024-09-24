@@ -1,4 +1,5 @@
 defmodule CodingTrainingElixirWeb.Chapter14Live do
+  @wisconsin ["wisconsin", "wi"]
   use CodingTrainingElixirWeb, :live_view
 
   def mount(_params, _session, socket) do
@@ -23,7 +24,9 @@ defmodule CodingTrainingElixirWeb.Chapter14Live do
         subtotal = socket.assigns.form1.order.value
 
         result =
-          if socket.assigns.form1.state.value == "WI" do
+          if Enum.any?(@wisconsin, fn x ->
+               String.downcase(socket.assigns.form1.state.value) == x
+             end) do
             tax = subtotal * 5.5 / 100
             "The tax is #{tax} <br/> The total is #{tax + subtotal}"
           else
