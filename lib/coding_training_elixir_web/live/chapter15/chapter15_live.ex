@@ -1,5 +1,5 @@
 defmodule CodingTrainingElixirWeb.Chapter15Live do
-  @password "abc$123"
+  @user_map %{"user1" => "abc$123", "user2" => "secret"}
   use CodingTrainingElixirWeb, :live_view
 
   def mount(_params, _session, socket) do
@@ -20,9 +20,12 @@ defmodule CodingTrainingElixirWeb.Chapter15Live do
 
     case socket.assigns.form1.valid do
       true ->
+        user = Enum.find(@user_map, fn {_k, v} -> v == socket.assigns.form1.password.value end)
+
         result =
-          if socket.assigns.form1.password.value == @password do
-            "환영합니다!"
+          if user != nil do
+            {username, _password} = user
+            "#{username} 환영합니다!"
           else
             "암호가 틀렸습니다."
           end
