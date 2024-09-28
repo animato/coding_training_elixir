@@ -8,58 +8,32 @@ defmodule CodingTrainingElixirWeb.Chapter15Live do
   use CodingTrainingElixirWeb, :live_view
 
   def mount(_params, _session, socket) do
-    socket =
-      assign(socket,
-        form1: %{
-          password: %{value: nil, error: []},
-          valid: false
-        },
-        result1: []
-      )
-
+    socket = assign(socket, form: to_form(%{"password" => nil}))
     {:ok, socket}
   end
 
-  def handle_event("form1", params, socket) do
-    socket = update_values(socket, params)
-
-    case socket.assigns.form1.valid do
-      true ->
-        user =
-          Enum.find(@user_map, fn {_k, v} ->
-            Bcrypt.verify_pass(socket.assigns.form1.password.value, v)
-          end)
-
-        result =
-          if user != nil do
-            {username, _password} = user
-            "#{username} 환영합니다!"
-          else
-            "암호가 틀렸습니다."
-          end
-
-        {:noreply, assign(socket, result1: result)}
-
-      false ->
-        {:noreply, socket}
-    end
+  def handle_event("validate", %{"password" => password}, socket) do
+    {:noreply, assign(socket, form: to_form(%{"password" => password}))}
   end
 
-  defp update_values(socket, %{
-         "password" => password
-       }) do
-    password = validate_string(password)
+  def handle_event("save", %{"password" => password}, socket) do
+    user =
+      Enum.find(@user_map, fn {_k, v} ->
+        Bcrypt.verify_pass(password, v)
+      end)
 
-    valid =
-      [password.error]
-      |> Enum.all?(fn list -> list == [] end)
+    {result, message} =
+      if user != nil do
+        {username, _password} = user
+        {:info, "#{username} 환영합니다!"}
+      else
+        {:error, "암호가 틀렸습니다."}
+      end
 
-    assign(socket,
-      form1: %{
-        valid: valid,
-        password: password
-      }
-    )
+    {:noreply,
+     socket
+     |> assign(form: to_form(%{"password" => nil}))
+     |> put_flash(result, message)}
   end
 
   def validate_string(string) do

@@ -3,23 +3,26 @@
   <h1>Chapter 15 암호 검증</h1>
 
   <p>미리 저장된 암호를 비교하여 일치하면 "환영합니다!", 그렇지 않으면 "암호가 틀렸습니다." 를 출력. <br />설정된 암호는 'abc$123'</p>
-  <form phx-change="form1" phx-debounce="300" class="flex flex-col my-5">
+  <%!-- <form phx-change="form1" phx-debounce="300" class="flex flex-col my-5">
     <div class="flex flex-wrap">
       <div class="flex me-5">
         <.input
-          label="암호는 무엇입니까? "
+          label="암호를 입력하세요? "
           type="password"
           name="password"
           value={@form1.password.value}
           errors={@form1.password.error}
         />
       </div>
+      <div class="flex me-5">
+        <.button type="submit" disabled={!@form1.valid}>입력</.button>
+      </div>
     </div>
-  </form>
-
-  <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
-    <p class="text-xl">
-      <%= @result1 %>
-    </p>
-  </div>
+  </form> --%>
+  <.simple_form for={@form} phx-change="validate" phx-submit="save">
+    <.input field={@form[:password]} type="password" label="암호를 입력하세요?" />
+    <:actions>
+      <.button>입력</.button>
+    </:actions>
+  </.simple_form>
 </div>
