@@ -1,11 +1,12 @@
 defmodule CodingTrainingElixirWeb.Chapter15Live do
+  use CodingTrainingElixirWeb, :live_view
+
   @user_map %{
     # abc$123
     "user1" => "$2b$12$KGFZVTQCIdp.Dg1L7hgi7.uVWiNed2Ar6/ApfsNrqMWFh8QwI0fj2",
     # secret
     "user2" => "$2b$12$Ax1XUg9Vg7fMWM.UCYxXKeaJgmKVHcryhbQ/buF8Ekoi.x3YyoeFS"
   }
-  use CodingTrainingElixirWeb, :live_view
 
   def mount(_params, _session, socket) do
     socket = assign(socket, form: to_form(%{"password" => nil}))

@@ -1,0 +1,13 @@
+<.flash_group flash={@flash} />
+<div>
+  <h1>Chapter 16 합법적으로 운전 가능한 연령</h1>
+
+  <p>나이를 입력 받아 미국법상 운전 가능한 나이인 16세와 비교하여 안내문을 출력.</p>
+
+  <.simple_form for={@form} phx-change="validate" phx-submit="save">
+    <.input field={@form[:age]} type="number" label="나이가 몇살입니까?" />
+    <:actions>
+      <.button>입력</.button>
+    </:actions>
+  </.simple_form>
+</div>
