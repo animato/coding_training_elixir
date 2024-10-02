@@ -1,0 +1,17 @@
+<.flash_group flash={@flash} />
+<div>
+  <h1>Chapter 18 온도 변환</h1>
+
+  <p>화씨온도와 섭씨온도를 서로 변환시키는 프로그램</p>
+
+  <.simple_form for={@form} phx-change="validate">
+    <.input field={@form[:type]} type="select" options={@options} label="변환법" />
+
+    <.input field={@form[:temperature]} type="number" label="온도를 입력하세요" />
+  </.simple_form>
+  <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
+    <p class="text-xl">
+      <%= @result %>
+    </p>
+  </div>
+</div>
