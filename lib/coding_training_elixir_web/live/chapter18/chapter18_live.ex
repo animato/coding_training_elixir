@@ -5,6 +5,7 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
     socket =
       assign(socket,
         form: to_form(%{"temperature" => nil}, errors: []),
+        origin: "화씨",
         options: ["화씨(Fahrenheit) -> 섭씨(Celsius)": "C", "섭씨(Celsius) -> 화씨(Fahrenheit)": "F"],
         result: ""
       )
@@ -13,6 +14,12 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
   end
 
   def handle_event("validate", %{"temperature" => temperature, "type" => type}, socket) do
+    {origin, target} =
+      case type do
+        "C" -> {"화씨", "섭씨"}
+        "F" -> {"섭씨", "화씨"}
+      end
+
     case validate_integer(temperature) do
       {:ok, temperature} ->
         result =
@@ -23,7 +30,8 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
 
         {:noreply,
          assign(socket,
-           result: "변환된 온도는 #{result} 입니다.",
+           result: "변환된 #{target} 온도는 #{result} 입니다.",
+           origin: origin,
            form: to_form(%{"temperature" => temperature, "type" => type}, errors: [])
          )}
 
@@ -31,6 +39,7 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
         {:noreply,
          assign(socket,
            result: "",
+           origin: origin,
            form:
              to_form(%{"temperature" => temperature, "type" => type},
                errors: [temperature: {message, []}]
