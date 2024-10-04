@@ -1,38 +1,46 @@
 defmodule CodingTrainingElixirWeb.Chapter18Live do
   use CodingTrainingElixirWeb, :live_view
 
+  @options [
+    "화씨(Fahrenheit)": "F",
+    "섭씨(Celsius)": "C"
+  ]
+
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
         form: to_form(%{"temperature" => nil}, errors: []),
-        origin: "화씨",
-        options: ["화씨(Fahrenheit) -> 섭씨(Celsius)": "C", "섭씨(Celsius) -> 화씨(Fahrenheit)": "F"],
+        origin_options: @options,
+        target_options: @options,
         result: ""
       )
 
     {:ok, socket}
   end
 
-  def handle_event("validate", %{"temperature" => temperature, "type" => type}, socket) do
-    {origin, target} =
-      case type do
-        "C" -> {"화씨", "섭씨"}
-        "F" -> {"섭씨", "화씨"}
-      end
-
+  def handle_event(
+        "validate",
+        %{"temperature" => temperature, "origin" => origin, "target" => target},
+        socket
+      ) do
     case validate_integer(temperature) do
       {:ok, temperature} ->
         result =
-          case type do
-            "C" -> fahrenheit_to_celsius(temperature)
-            "F" -> celcius_to_fahrenheit(temperature)
+          case {origin, target} do
+            {"F", "C"} -> fahrenheit_to_celsius(temperature)
+            {"C", "F"} -> celcius_to_fahrenheit(temperature)
+            _ -> temperature
           end
+
+        type = Enum.find_value(@options, fn {k, v} -> if v == target, do: k end)
 
         {:noreply,
          assign(socket,
-           result: "변환된 #{target} 온도는 #{result} 입니다.",
-           origin: origin,
-           form: to_form(%{"temperature" => temperature, "type" => type}, errors: [])
+           result: "변환된 #{type} 온도는 #{result} 입니다.",
+           form:
+             to_form(%{"temperature" => temperature, "origin" => origin, "target" => target},
+               errors: []
+             )
          )}
 
       {:error, message} ->
@@ -41,7 +49,7 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
            result: "",
            origin: origin,
            form:
-             to_form(%{"temperature" => temperature, "type" => type},
+             to_form(%{"temperature" => temperature, "origin" => origin, "target" => target},
                errors: [temperature: {message, []}]
              )
          )}
