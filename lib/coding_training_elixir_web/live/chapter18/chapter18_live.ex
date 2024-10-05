@@ -3,13 +3,17 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
 
   @options [
     "화씨(Fahrenheit)": "F",
-    "섭씨(Celsius)": "C"
+    "섭씨(Celsius)": "C",
+    "켈빈(Kelvin)": "K"
   ]
+
+  @reverse_options Map.new(@options, fn {k, v} -> {v, k} end)
 
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
         form: to_form(%{"temperature" => nil}, errors: []),
+        origin_label: "화씨(Fahrenheit)",
         origin_options: @options,
         target_options: @options,
         result: ""
@@ -23,20 +27,26 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
         %{"temperature" => temperature, "origin" => origin, "target" => target},
         socket
       ) do
+    origin_label = Map.get(@reverse_options, origin)
+    target_label = Map.get(@reverse_options, target)
+
     case validate_integer(temperature) do
       {:ok, temperature} ->
         result =
           case {origin, target} do
             {"F", "C"} -> fahrenheit_to_celsius(temperature)
-            {"C", "F"} -> celcius_to_fahrenheit(temperature)
+            {"F", "K"} -> fahrenheit_to_celsius(temperature) |> celsius_to_kelvin()
+            {"C", "F"} -> celsius_to_fahrenheit(temperature)
+            {"C", "K"} -> celsius_to_kelvin(temperature)
+            {"K", "F"} -> kelvin_to_celsius(temperature) |> celsius_to_fahrenheit()
+            {"K", "C"} -> kelvin_to_celsius(temperature)
             _ -> temperature
           end
 
-        type = Enum.find_value(@options, fn {k, v} -> if v == target, do: k end)
-
         {:noreply,
          assign(socket,
-           result: "변환된 #{type} 온도는 #{result} 입니다.",
+           result: "변환된 #{target_label} 온도는 #{result} 입니다.",
+           origin_label: origin_label,
            form:
              to_form(%{"temperature" => temperature, "origin" => origin, "target" => target},
                errors: []
@@ -48,6 +58,7 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
          assign(socket,
            result: "",
            origin: origin,
+           origin_label: origin_label,
            form:
              to_form(%{"temperature" => temperature, "origin" => origin, "target" => target},
                errors: [temperature: {message, []}]
@@ -67,7 +78,15 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
     (f - 32) * 5 / 9
   end
 
-  def celcius_to_fahrenheit(c) do
+  def celsius_to_fahrenheit(c) do
     c * 9 / 5 + 32
+  end
+
+  def celsius_to_kelvin(c) do
+    c + 273.15
+  end
+
+  def kelvin_to_celsius(k) do
+    k - 273.15
   end
 end
