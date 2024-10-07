@@ -10,6 +10,7 @@
         <.input
           field={@form[:origin]}
           type="select"
+          prompt="변환할 온도의 단위를 선택하세요"
           options={@origin_options}
           label="온도 종류"
         />
@@ -20,6 +21,7 @@
       <div class="flex-1">
         <.input
           field={@form[:target]}
+          prompt="변환할 온도의 단위를 선택하세요"
           type="select"
           options={@target_options}
           label="온도 종류"

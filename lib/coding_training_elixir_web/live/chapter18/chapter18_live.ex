@@ -30,6 +30,12 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
     origin_label = Map.get(@reverse_options, origin)
     target_label = Map.get(@reverse_options, target)
 
+    filtered_origin =
+      Map.delete(@reverse_options, target) |> Map.new(fn {k, v} -> {v, k} end)
+
+    filtered_target =
+      Map.delete(@reverse_options, origin) |> Map.new(fn {k, v} -> {v, k} end)
+
     case validate_integer(temperature) do
       {:ok, temperature} ->
         result =
@@ -40,13 +46,15 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
             {"C", "K"} -> celsius_to_kelvin(temperature)
             {"K", "F"} -> kelvin_to_celsius(temperature) |> celsius_to_fahrenheit()
             {"K", "C"} -> kelvin_to_celsius(temperature)
-            _ -> temperature
+            _ -> ""
           end
 
         {:noreply,
          assign(socket,
-           result: "변환된 #{target_label} 온도는 #{result} 입니다.",
+           result: generate_result_message(result, target_label),
            origin_label: origin_label,
+           origin_options: filtered_origin,
+           target_options: filtered_target,
            form:
              to_form(%{"temperature" => temperature, "origin" => origin, "target" => target},
                errors: []
@@ -59,12 +67,20 @@ defmodule CodingTrainingElixirWeb.Chapter18Live do
            result: "",
            origin: origin,
            origin_label: origin_label,
+           origin_options: filtered_origin,
+           target_options: filtered_target,
            form:
              to_form(%{"temperature" => temperature, "origin" => origin, "target" => target},
                errors: [temperature: {message, []}]
              )
          )}
     end
+  end
+
+  defp generate_result_message("", _), do: ""
+
+  defp generate_result_message(result, target_label) do
+    "변환된 #{target_label} 온도는 #{result} 입니다."
   end
 
   def validate_integer(string) do
