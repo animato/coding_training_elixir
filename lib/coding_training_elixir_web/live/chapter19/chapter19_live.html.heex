@@ -1,0 +1,25 @@
+<.flash_group flash={@flash} />
+<div>
+  <h1>Chapter 19 BMI 계산기</h1>
+
+  <p>사용자로부터 키(센티미터 단위), 몸무게(킬로그램 단위)를 입력 받아 체질량지수를 계산하는 프로그램</p>
+  <p>계산 공식: BMI = weight / (height * height)</p>
+
+  <.simple_form for={@form} phx-change="validate">
+    <.input
+      field={@form[:height]}
+      type="number"
+      label="키(센티미터 단위)를 입력하세요"
+    />
+    <.input
+      field={@form[:weight]}
+      type="number"
+      label="몸무게(킬로그램 단위)를 입력하세요"
+    />
+  </.simple_form>
+  <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
+    <p class="text-xl">
+      <%= @result %>
+    </p>
+  </div>
+</div>
