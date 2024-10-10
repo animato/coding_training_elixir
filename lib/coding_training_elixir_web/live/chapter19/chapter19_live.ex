@@ -1,10 +1,12 @@
 defmodule CodingTrainingElixirWeb.Chapter19Live do
   use CodingTrainingElixirWeb, :live_view
 
+  @units ["inch/pound", "cm/kg"]
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
         form: to_form(%{"height" => nil, "weight" => nil}, errors: []),
+        units: @units,
         result: ""
       )
 
@@ -13,12 +15,12 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
 
   def handle_event(
         "validate",
-        %{"height" => height, "weight" => weight} = params,
+        %{"unit" => unit, "height" => height, "weight" => weight} = params,
         socket
       ) do
     with {height, _} <- Float.parse(height),
          {weight, _} <- Float.parse(weight) do
-      bmi = calculate_bmi(height, weight)
+      bmi = calculate_bmi(unit, height, weight)
       {:noreply, update_socket(socket, bmi, [], params)}
     else
       _ -> {:noreply, update_socket(socket, "", [], params)}
@@ -29,7 +31,7 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
         socket,
         result,
         errors,
-        %{"height" => height, "weight" => weight} = params
+        params
       ) do
     assign(socket,
       result: generate_result_message(result),
@@ -50,7 +52,11 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
     end
   end
 
-  def calculate_bmi(height, weight) do
+  def calculate_bmi("inch/pound", height, weight) do
+    weight / :math.pow(height, 2) * 703
+  end
+
+  def calculate_bmi("cm/kg", height, weight) do
     weight / :math.pow(height / 100, 2)
   end
 end
