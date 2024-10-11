@@ -13,8 +13,63 @@
       options={@units}
       label="키/몸무게 단위"
     />
-    <.input field={@form[:height]} type="number" label="키를 입력하세요" />
-    <.input field={@form[:weight]} type="number" label="몸무게를 입력하세요" />
+    <div class="flex">
+      <div class="flex-1">
+        <.input
+          field={@form[:height]}
+          type="range"
+          label="키를 입력하세요"
+          min="25"
+          max="250"
+          step="1"
+          list="markers"
+        />
+      </div>
+      <div class="flex w-32 justify-center items-center">
+        <%= @form.params["height"] %>
+      </div>
+      <datalist id="markers">
+        <option value="25"></option>
+        <option value="50"></option>
+        <option value="75"></option>
+        <option value="100"></option>
+        <option value="125"></option>
+        <option value="150" label="150"></option>
+        <option value="175" label="175"></option>
+        <option value="200" label="200"></option>
+        <option value="225" label="225"></option>
+        <option value="250" label="250"></option>
+      </datalist>
+    </div>
+
+    <div class="flex">
+      <div class="flex-1">
+        <.input
+          field={@form[:weight]}
+          type="range"
+          min="25"
+          max="250"
+          step="1"
+          list="markers"
+          label="몸무게를 입력하세요"
+        />
+      </div>
+      <div class="flex w-32 justify-center items-center">
+        <%= @form.params["weight"] %>
+      </div>
+      <datalist id="markers">
+        <option value="25"></option>
+        <option value="50"></option>
+        <option value="75"></option>
+        <option value="100"></option>
+        <option value="125"></option>
+        <option value="150" label="150"></option>
+        <option value="175" label="175"></option>
+        <option value="200" label="200"></option>
+        <option value="225" label="225"></option>
+        <option value="250" label="250"></option>
+      </datalist>
+    </div>
   </.simple_form>
   <div class="p-8 m-8 flex-col mx-auto bg-white rounded-xl shadow-lg max-w-lg mx-auto">
     <p class="text-xl">
