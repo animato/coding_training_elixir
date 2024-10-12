@@ -1,13 +1,14 @@
 defmodule CodingTrainingElixirWeb.Chapter19Live do
   use CodingTrainingElixirWeb, :live_view
 
-  @units ["inch/pound", "cm/kg"]
+  @units ["cm/kg", "inch/pound"]
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
-        form: to_form(%{"height" => nil, "weight" => nil}, errors: []),
+        form: to_form(%{"height" => 180, "weight" => 79}, errors: []),
         units: @units,
-        result: ""
+        result: "",
+        unit: %{"height" => "cm", "weight" => "kg"}
       )
 
     {:ok, socket}
@@ -27,15 +28,18 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
     end
   end
 
-  def update_socket(
-        socket,
-        result,
-        errors,
-        params
-      ) do
+  def update_socket(socket, result, errors, params) do
+    unit =
+      if params["unit"] == "cm/kg" do
+        %{"height" => "cm", "weight" => "kg"}
+      else
+        %{"height" => "inch", "weight" => "pound"}
+      end
+
     assign(socket,
       result: generate_result_message(result),
-      form: to_form(params, errors: errors)
+      form: to_form(params, errors: errors),
+      unit: unit
     )
   end
 
