@@ -18,8 +18,8 @@
           field={@form[:height]}
           type="range"
           label="키를 입력하세요"
-          min="25"
-          max="250"
+          min={elem(@height_range, 0)}
+          max={elem(@height_range, 1)}
           step="1"
           list="markers"
         />
@@ -46,8 +46,8 @@
         <.input
           field={@form[:weight]}
           type="range"
-          min="25"
-          max="250"
+          min={elem(@weight_range, 0)}
+          max={elem(@weight_range, 1)}
           step="1"
           list="markers"
           label="몸무게를 입력하세요"

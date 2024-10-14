@@ -2,13 +2,18 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
   use CodingTrainingElixirWeb, :live_view
 
   @units ["cm/kg", "inch/pound"]
+  @height_range {0, 250}
+  @weight_range {0, 200}
+
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
         form: to_form(%{"height" => 180, "weight" => 79}, errors: []),
         units: @units,
         result: "",
-        unit: %{"height" => "cm", "weight" => "kg"}
+        unit: %{"height" => "cm", "weight" => "kg"},
+        height_range: @height_range,
+        weight_range: @weight_range
       )
 
     {:ok, socket}
@@ -36,10 +41,26 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
         %{"height" => "inch", "weight" => "pound"}
       end
 
+    height_range =
+      if params["unit"] == "cm/kg" do
+        @height_range
+      else
+        {cm_to_inch(0), cm_to_inch(250)}
+      end
+
+    weight_range =
+      if params["unit"] == "cm/kg" do
+        @weight_range
+      else
+        {kg_to_pound(0), kg_to_pound(250)}
+      end
+
     assign(socket,
       result: generate_result_message(result),
       form: to_form(params, errors: errors),
-      unit: unit
+      unit: unit,
+      height_range: height_range,
+      weight_range: weight_range
     )
   end
 
@@ -54,6 +75,14 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
       {float, ""} -> {:ok, float}
       _ -> {:error, "숫자가 아닌 값이 입력되었습니다."}
     end
+  end
+
+  def cm_to_inch(cm) do
+    cm * 0.393701
+  end
+
+  def kg_to_pound(kg) do
+    kg * 2.20462
   end
 
   def calculate_bmi("inch/pound", height, weight) do
