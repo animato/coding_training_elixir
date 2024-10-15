@@ -4,6 +4,8 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
   @units ["cm/kg", "inch/pound"]
   @height_range {0, 250}
   @weight_range {0, 200}
+  @minBMI 10
+  @maxBMI 40
 
   def mount(_params, _session, socket) do
     socket =
@@ -11,6 +13,7 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
         form: to_form(%{"height" => 180, "weight" => 79}, errors: []),
         units: @units,
         result: "",
+        position: position(0),
         unit: %{"height" => "cm", "weight" => "kg"},
         height_range: @height_range,
         weight_range: @weight_range
@@ -56,7 +59,8 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
       end
 
     assign(socket,
-      result: generate_result_message(result),
+      result: result,
+      position: position(result),
       form: to_form(params, errors: errors),
       unit: unit,
       height_range: height_range,
@@ -64,10 +68,8 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
     )
   end
 
-  defp generate_result_message(""), do: ""
-
-  defp generate_result_message(bmi) do
-    "당신의 BMI는 #{bmi} 입니다."
+  def position(bmi) do
+    max(0, min(100, (bmi - @minBMI) / (@maxBMI - @minBMI) * 100))
   end
 
   def validate_float(string) do
