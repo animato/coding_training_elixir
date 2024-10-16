@@ -74,7 +74,7 @@
     <div class="text-lg mb-4">
       당신의 BMI는 <span id="bmi-value"><%= @result %></span> 입니다.
     </div>
-    <div class="relative w-full h-8 rounded-full bg-gradient-to-r from-blue-500 via-green-500 via-yellow-500 to-red-500 mb-4">
+    <div class="relative w-full h-8 rounded bg-gradient-to-r from-blue-500 via-green-500 via-yellow-500 to-red-500 mb-4">
       <div
         id="bmi-indicator"
         class="absolute top-0 w-1 h-full bg-black rounded"
@@ -83,10 +83,10 @@
       </div>
     </div>
     <div class="flex justify-between text-xs">
-      <span>Underweight</span>
-      <span>Normal</span>
-      <span>Overweight</span>
-      <span>Obese</span>
+      <span>저체중 (BMI &lt 18.5)</span>
+      <span>정상 (BMI &lt= 23)</span>
+      <span>과체중 (BMI &lt= 25)</span>
+      <span>비만 (BMI &gt 25)</span>
     </div>
   </div>
 </div>

@@ -69,7 +69,22 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
   end
 
   def position(bmi) do
-    max(0, min(100, (bmi - @minBMI) / (@maxBMI - @minBMI) * 100))
+    percentage =
+      case bmi do
+        bmi when bmi < 18.5 ->
+          bmi / 18.5 * 25
+
+        bmi when bmi >= 18.5 and bmi < 23 ->
+          25 + (bmi - 18.5) / (23 - 18.5) * 25
+
+        bmi when bmi >= 23 and bmi < 25 ->
+          50 + (bmi - 23) / (25 - 23) * 25
+
+        _ ->
+          75 + (bmi - 25) / (40 - 25) * 25
+      end
+
+    max(0, min(100, percentage))
   end
 
   def validate_float(string) do
