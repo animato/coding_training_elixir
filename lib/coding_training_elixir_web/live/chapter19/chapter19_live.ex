@@ -2,21 +2,33 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
   use CodingTrainingElixirWeb, :live_view
 
   @units ["cm/kg", "inch/pound"]
-  @height_range {0, 250}
-  @weight_range {0, 200}
-  @minBMI 10
-  @maxBMI 40
+  @unit_configs %{
+    "cm/kg" => %{
+      "height_unit" => "cm",
+      "weight_unit" => "kg",
+      "height_min" => 0,
+      "height_max" => 250,
+      "weight_min" => 0,
+      "weight_max" => 200
+    },
+    "inch/pound" => %{
+      "height_unit" => "inch",
+      "weight_unit" => "pound",
+      "height_min" => 0,
+      "height_max" => 100,
+      "weight_min" => 0,
+      "weight_max" => 440
+    }
+  }
 
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
-        form: to_form(%{"height" => 180, "weight" => 79}, errors: []),
+        form: to_form(%{"height" => nil, "weight" => nil}, errors: []),
         units: @units,
         result: "",
         position: position(0),
-        unit: %{"height" => "cm", "weight" => "kg"},
-        height_range: @height_range,
-        weight_range: @weight_range
+        unit: Map.get(@unit_configs, "cm/kg")
       )
 
     {:ok, socket}
@@ -37,50 +49,27 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
   end
 
   def update_socket(socket, result, errors, params) do
-    unit =
-      if params["unit"] == "cm/kg" do
-        %{"height" => "cm", "weight" => "kg"}
-      else
-        %{"height" => "inch", "weight" => "pound"}
-      end
-
-    height_range =
-      if params["unit"] == "cm/kg" do
-        @height_range
-      else
-        {cm_to_inch(0), cm_to_inch(250)}
-      end
-
-    weight_range =
-      if params["unit"] == "cm/kg" do
-        @weight_range
-      else
-        {kg_to_pound(0), kg_to_pound(250)}
-      end
-
     assign(socket,
       result: result,
       position: position(result),
       form: to_form(params, errors: errors),
-      unit: unit,
-      height_range: height_range,
-      weight_range: weight_range
+      unit: Map.get(@unit_configs, params["unit"])
     )
   end
 
   def position(bmi) do
     percentage =
-      case bmi do
-        bmi when bmi < 18.5 ->
+      cond do
+        bmi < 18.5 ->
           bmi / 18.5 * 25
 
-        bmi when bmi >= 18.5 and bmi < 23 ->
+        bmi >= 18.5 and bmi < 23 ->
           25 + (bmi - 18.5) / (23 - 18.5) * 25
 
-        bmi when bmi >= 23 and bmi < 25 ->
+        bmi >= 23 and bmi < 25 ->
           50 + (bmi - 23) / (25 - 23) * 25
 
-        _ ->
+        true ->
           75 + (bmi - 25) / (40 - 25) * 25
       end
 
@@ -92,14 +81,6 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
       {float, ""} -> {:ok, float}
       _ -> {:error, "숫자가 아닌 값이 입력되었습니다."}
     end
-  end
-
-  def cm_to_inch(cm) do
-    cm * 0.393701
-  end
-
-  def kg_to_pound(kg) do
-    kg * 2.20462
   end
 
   def calculate_bmi("inch/pound", height, weight) do

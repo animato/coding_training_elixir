@@ -6,7 +6,12 @@ defmodule CodingTrainingElixirWeb.Chapter9Live do
 
   def mount(_params, _session, socket) do
     socket =
-      assign(socket, result: "", area: 0, liter: 0, shape_options: [사각형: @rectangle, 타원: @ellipse])
+      assign(socket,
+        result: "",
+        area: 0,
+        liter: 0,
+        shape_options: [사각형: @rectangle, 타원: @ellipse]
+      )
 
     {:ok, socket}
   end

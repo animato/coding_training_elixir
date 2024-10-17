@@ -18,14 +18,14 @@
           field={@form[:height]}
           type="range"
           label="키를 입력하세요"
-          min={elem(@height_range, 0)}
-          max={elem(@height_range, 1)}
+          min={@unit["height_min"]}
+          max={@unit["height_max"]}
           step="1"
           list="markers"
         />
       </div>
       <div class="flex w-32 justify-center items-center">
-        <%= @form.params["height"] %><%= @unit["height"] %>
+        <%= @form.params["height"] %><%= @unit["height_unit"] %>
       </div>
       <datalist id="markers">
         <option value="25"></option>
@@ -46,15 +46,15 @@
         <.input
           field={@form[:weight]}
           type="range"
-          min={elem(@weight_range, 0)}
-          max={elem(@weight_range, 1)}
+          min={@unit["weight_min"]}
+          max={@unit["weight_max"]}
           step="1"
           list="markers"
           label="몸무게를 입력하세요"
         />
       </div>
       <div class="flex w-32 justify-center items-center">
-        <%= @form.params["weight"] %><%= @unit["weight"] %>
+        <%= @form.params["weight"] %><%= @unit["weight_unit"] %>
       </div>
       <datalist id="markers">
         <option value="25"></option>

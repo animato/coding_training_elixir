@@ -10,7 +10,8 @@ defmodule CodingTrainingElixir.Application do
     children = [
       CodingTrainingElixirWeb.Telemetry,
       CodingTrainingElixir.Repo,
-      {DNSCluster, query: Application.get_env(:coding_training_elixir, :dns_cluster_query) || :ignore},
+      {DNSCluster,
+       query: Application.get_env(:coding_training_elixir, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: CodingTrainingElixir.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: CodingTrainingElixir.Finch},
