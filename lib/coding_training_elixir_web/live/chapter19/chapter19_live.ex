@@ -1,34 +1,36 @@
 defmodule CodingTrainingElixirWeb.Chapter19Live do
   use CodingTrainingElixirWeb, :live_view
 
-  @units ["cm/kg", "inch/pound"]
+  @cm_to_inch_ratio 0.393701
+  @kg_to_pound_ratio 2.20462
+
+  @units ["metric", "imperial"]
   @unit_configs %{
-    "cm/kg" => %{
+    "metric" => %{
       "height_unit" => "cm",
       "weight_unit" => "kg",
-      "height_min" => 0,
-      "height_max" => 250,
-      "weight_min" => 0,
-      "weight_max" => 200
+      "height_min" => 100,
+      "height_max" => 220,
+      "weight_min" => 30,
+      "weight_max" => 150
     },
-    "inch/pound" => %{
+    "imperial" => %{
       "height_unit" => "inch",
       "weight_unit" => "pound",
-      "height_min" => 0,
-      "height_max" => 100,
-      "weight_min" => 0,
-      "weight_max" => 440
+      "height_min" => ceil(100 * @cm_to_inch_ratio),
+      "height_max" => ceil(220 * @cm_to_inch_ratio),
+      "weight_min" => ceil(30 * @kg_to_pound_ratio),
+      "weight_max" => ceil(150 * @kg_to_pound_ratio)
     }
   }
 
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
-        form: to_form(%{"height" => nil, "weight" => nil}, errors: []),
+        form: to_form(%{"height" => 180, "weight" => 70, "unit" => "metric"}, errors: []),
         units: @units,
-        result: "",
-        position: position(0),
-        unit: Map.get(@unit_configs, "cm/kg")
+        result: %{bmi: 0, width: "50%", color: "bg-blue-500", category: "저체중"},
+        unit: Map.get(@unit_configs, "metric")
       )
 
     {:ok, socket}
@@ -39,41 +41,56 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
         %{"unit" => unit, "height" => height, "weight" => weight} = params,
         socket
       ) do
-    with {height, _} <- Float.parse(height),
-         {weight, _} <- Float.parse(weight) do
-      bmi = calculate_bmi(unit, height, weight)
-      {:noreply, update_socket(socket, bmi, [], params)}
-    else
-      _ -> {:noreply, update_socket(socket, "", [], params)}
-    end
-  end
-
-  def update_socket(socket, result, errors, params) do
-    assign(socket,
-      result: result,
-      position: position(result),
-      form: to_form(params, errors: errors),
-      unit: Map.get(@unit_configs, params["unit"])
-    )
-  end
-
-  def position(bmi) do
-    percentage =
-      cond do
-        bmi < 18.5 ->
-          bmi / 18.5 * 25
-
-        bmi >= 18.5 and bmi < 23 ->
-          25 + (bmi - 18.5) / (23 - 18.5) * 25
-
-        bmi >= 23 and bmi < 25 ->
-          50 + (bmi - 23) / (25 - 23) * 25
-
-        true ->
-          75 + (bmi - 25) / (40 - 25) * 25
+    bmi =
+      with {height, _} <- Float.parse(height),
+           {weight, _} <- Float.parse(weight) do
+        calculate_bmi(unit, height, weight)
+      else
+        _ -> ""
       end
 
-    max(0, min(100, percentage))
+    {:noreply,
+     assign(socket,
+       result: result(bmi),
+       form: to_form(params, errors: []),
+       unit: Map.get(@unit_configs, params["unit"])
+     )}
+  end
+
+  def result(bmi) do
+    cond do
+      bmi < 18.5 ->
+        %{
+          bmi: bmi,
+          category: "저체중",
+          width: "#{min(bmi / 40 * 100, 100)}%",
+          color: "bg-blue-500"
+        }
+
+      bmi >= 18.5 and bmi < 23 ->
+        %{
+          bmi: bmi,
+          category: "정상",
+          width: "#{min(bmi / 40 * 100, 100)}%",
+          color: "bg-green-500"
+        }
+
+      bmi >= 23 and bmi < 25 ->
+        %{
+          bmi: bmi,
+          category: "과체중",
+          width: "#{min(bmi / 40 * 100, 100)}%",
+          color: "bg-yellow-500"
+        }
+
+      true ->
+        %{
+          bmi: bmi,
+          category: "비만",
+          width: "#{min(bmi / 40 * 100, 100)}%",
+          color: "bg-red-500"
+        }
+    end
   end
 
   def validate_float(string) do
@@ -83,11 +100,11 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
     end
   end
 
-  def calculate_bmi("inch/pound", height, weight) do
+  def calculate_bmi("imperial", height, weight) do
     weight / :math.pow(height, 2) * 703
   end
 
-  def calculate_bmi("cm/kg", height, weight) do
+  def calculate_bmi("metric", height, weight) do
     weight / :math.pow(height / 100, 2)
   end
 end

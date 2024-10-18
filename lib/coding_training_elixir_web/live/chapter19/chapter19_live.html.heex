@@ -5,88 +5,78 @@
   <p>사용자로부터 키(센티미터 단위), 몸무게(킬로그램 단위)를 입력 받아 체질량지수를 계산하는 프로그램</p>
   <p>계산 공식: BMI = weight / (height * height)</p>
 
-  <.simple_form for={@form} phx-change="validate">
-    <.input
-      field={@form[:unit]}
-      type="select"
-      options={@units}
-      label="키/몸무게 단위를 선택하세요"
-    />
-    <div class="flex">
-      <div class="flex-1">
-        <.input
-          field={@form[:height]}
+  <div class="max-w-md w-full mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <%!-- <h1 class="text-2xl font-bold mb-4">BMI 계산기</h1> --%>
+    <.simple_form for={@form} phx-change="validate">
+      <div class="flex space-x-4 mb-4">
+        <label class="inline-flex items-center">
+          <input
+            type="radio"
+            class="form-radio text-blue-600"
+            name="unit"
+            value="metric"
+            checked={@form.params["unit"] == "metric"}
+          />
+          <span class="ml-2">cm / kg</span>
+        </label>
+        <label class="inline-flex items-center">
+          <input
+            checked={@form.params["unit"] == "imperial"}
+            type="radio"
+            class="form-radio text-blue-600"
+            name="unit"
+            value="imperial"
+          />
+          <span class="ml-2">inch / pound</span>
+        </label>
+      </div>
+
+      <div class="mb-4">
+        <label for="height" class="block text-sm font-medium text-gray-700">
+          키 (<%= @unit["height_unit"] %>)
+        </label>
+        <input
           type="range"
-          label="키를 입력하세요"
+          id="height"
+          name="height"
+          value={@form.params["height"]}
           min={@unit["height_min"]}
           max={@unit["height_max"]}
-          step="1"
-          list="markers"
+          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
         />
+        <span id="height-value" class="text-sm text-gray-500">
+          <%= @form.params["height"] %> <%= @unit["height_unit"] %>
+        </span>
       </div>
-      <div class="flex w-32 justify-center items-center">
-        <%= @form.params["height"] %><%= @unit["height_unit"] %>
-      </div>
-      <datalist id="markers">
-        <option value="25"></option>
-        <option value="50"></option>
-        <option value="75"></option>
-        <option value="100"></option>
-        <option value="125"></option>
-        <option value="150" label="150"></option>
-        <option value="175" label="175"></option>
-        <option value="200" label="200"></option>
-        <option value="225" label="225"></option>
-        <option value="250" label="250"></option>
-      </datalist>
-    </div>
 
-    <div class="flex">
-      <div class="flex-1">
-        <.input
-          field={@form[:weight]}
+      <div class="mb-4">
+        <label for="weight" class="block text-sm font-medium text-gray-700">
+          몸무게 (<%= @unit["weight_unit"] %>)
+        </label>
+        <input
           type="range"
+          id="weight"
+          name="weight"
+          value={@form.params["weight"]}
           min={@unit["weight_min"]}
           max={@unit["weight_max"]}
-          step="1"
-          list="markers"
-          label="몸무게를 입력하세요"
+          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
         />
+        <span id="weight-value" class="text-sm text-gray-500">
+          <%= @form.params["weight"] %> <%= @unit["weight_unit"] %>
+        </span>
       </div>
-      <div class="flex w-32 justify-center items-center">
-        <%= @form.params["weight"] %><%= @unit["weight_unit"] %>
+    </.simple_form>
+
+    <div class="mt-6">
+      <h2 class="text-xl font-semibold mb-2">
+        BMI 결과: <span id="bmi-result"><%= @result.bmi %></span>
+      </h2>
+      <div class="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+        <div id="bmi-spectrum" class={"h-full #{@result.color}"} style={"width: #{@result.width}"}>
+        </div>
       </div>
-      <datalist id="markers">
-        <option value="25"></option>
-        <option value="50"></option>
-        <option value="75"></option>
-        <option value="100"></option>
-        <option value="125"></option>
-        <option value="150" label="150"></option>
-        <option value="175" label="175"></option>
-        <option value="200" label="200"></option>
-        <option value="225" label="225"></option>
-        <option value="250" label="250"></option>
-      </datalist>
-    </div>
-  </.simple_form>
-  <div class="w-full max-w-md mx-auto text-center mt-10">
-    <div class="text-lg mb-4">
-      당신의 BMI는 <span id="bmi-value"><%= @result %></span> 입니다.
-    </div>
-    <div class="relative w-full h-8 rounded bg-gradient-to-r from-blue-500 via-green-500 via-yellow-500 to-red-500 mb-4">
-      <div
-        id="bmi-indicator"
-        class="absolute top-0 w-1 h-full bg-black rounded"
-        style={"left: #{@position}%"}
-      >
-      </div>
-    </div>
-    <div class="flex justify-between text-xs">
-      <span>저체중 (BMI &lt 18.5)</span>
-      <span>정상 (BMI &lt= 23)</span>
-      <span>과체중 (BMI &lt= 25)</span>
-      <span>비만 (BMI &gt 25)</span>
+      <p id="bmi-category" class="mt-2 text-center font-medium"><%= @result.category %></p>
     </div>
   </div>
 </div>
