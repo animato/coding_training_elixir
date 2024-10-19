@@ -1,7 +1,6 @@
 <.flash_group flash={@flash} />
 <div>
   <h1>Chapter 19 BMI 계산기</h1>
-
   <p>사용자로부터 키(센티미터 단위), 몸무게(킬로그램 단위)를 입력 받아 체질량지수를 계산하는 프로그램</p>
   <p>계산 공식: BMI = weight / (height * height)</p>
 
@@ -31,41 +30,23 @@
         </label>
       </div>
 
-      <div class="mb-4">
-        <label for="height" class="block text-sm font-medium text-gray-700">
-          키 (<%= @unit["height_unit"] %>)
-        </label>
-        <input
-          type="range"
-          id="height"
-          name="height"
-          value={@form.params["height"]}
-          min={@unit["height_min"]}
-          max={@unit["height_max"]}
-          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-        />
-        <span id="height-value" class="text-sm text-gray-500">
-          <%= @form.params["height"] %> <%= @unit["height_unit"] %>
-        </span>
-      </div>
+      <.bmi_slider
+        id="height"
+        name="height"
+        unit={@unit["height_unit"]}
+        value={@form.params["height"]}
+        min={@unit["height_min"]}
+        max={@unit["height_max"]}
+      />
 
-      <div class="mb-4">
-        <label for="weight" class="block text-sm font-medium text-gray-700">
-          몸무게 (<%= @unit["weight_unit"] %>)
-        </label>
-        <input
-          type="range"
-          id="weight"
-          name="weight"
-          value={@form.params["weight"]}
-          min={@unit["weight_min"]}
-          max={@unit["weight_max"]}
-          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-        />
-        <span id="weight-value" class="text-sm text-gray-500">
-          <%= @form.params["weight"] %> <%= @unit["weight_unit"] %>
-        </span>
-      </div>
+      <.bmi_slider
+        id="weight"
+        name="weight"
+        unit={@unit["weight_unit"]}
+        value={@form.params["weight"]}
+        min={@unit["weight_min"]}
+        max={@unit["weight_max"]}
+      />
     </.simple_form>
 
     <div class="mt-6">

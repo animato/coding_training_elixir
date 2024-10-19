@@ -23,4 +23,26 @@ defmodule CodingTrainingElixirWeb.MyComponents do
     </.link>
     """
   end
+
+  def bmi_slider(assigns) do
+    ~H"""
+    <div class="mb-4">
+      <label for="height" class="block text-sm font-medium text-gray-700">
+        <%= @id %> (<%= @unit %>)
+      </label>
+      <input
+        type="range"
+        id={@id}
+        name={@name}
+        value={@value}
+        min={@min}
+        max={@max}
+        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+      />
+      <span id={"#{@id}-value"} class="text-sm text-gray-500">
+        <%= @value %> <%= @unit %>
+      </span>
+    </div>
+    """
+  end
 end
