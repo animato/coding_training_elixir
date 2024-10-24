@@ -18,24 +18,30 @@ defmodule CodingTrainingElixirWeb.Chapter21Live do
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
-        form: to_form(%{}, errors: []),
+        form: to_form(%{"monthNumber" => nil}, errors: []),
         result: nil
       )
+
+    # Gettext.put_locale(CodingTrainingElixirWeb.Gettext, "en")
 
     {:ok, socket}
   end
 
   def handle_event(
         "change",
-        %{"monthNumber" => month_number} = params,
+        %{"monthNumber" => month_number, "language" => language} = params,
         socket
       ) do
     month_text = get_month_text(month_number)
+    # gettext(month_text)
+    Gettext.put_locale(CodingTrainingElixirWeb.Gettext, language)
+    current_locale = Gettext.get_locale(CodingTrainingElixirWeb.Gettext)
+    IO.puts("Current locale: #{current_locale}")
 
     {:noreply,
      assign(socket,
        form: to_form(params, errors: []),
-       result: month_text
+       result: Gettext.gettext(CodingTrainingElixirWeb.Gettext, month_text)
      )}
   end
 
