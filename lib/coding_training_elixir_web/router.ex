@@ -35,6 +35,7 @@ defmodule CodingTrainingElixirWeb.Router do
     live "/chapter18", Chapter18Live
     live "/chapter19", Chapter19Live
     live "/chapter21", Chapter21Live
+    live "/chapter24", Chapter24Live
   end
 
   # Other scopes may use custom stacks.
