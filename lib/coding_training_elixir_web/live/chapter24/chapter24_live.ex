@@ -15,40 +15,28 @@ defmodule CodingTrainingElixirWeb.Chapter24Live do
     {:ok, socket}
   end
 
-  def handle_event(
-        "change_language",
-        %{"language" => language},
-        socket
-      ) do
+  def handle_event("change_language", %{"language" => language}, socket) do
     {:noreply, redirect(socket, to: ~p"/chapter24?locale=#{language}")}
   end
 
-  def handle_event(
-        "submit",
-        %{"word1" => word1, "word2" => word2} = params,
-        socket
-      ) do
-    result =
-      if is_anagram(word1, word2) do
-        "애너그램 입니다."
-      else
-        "애너그램이 아닙니다."
-      end
-
+  def handle_event("submit", %{"word1" => word1, "word2" => word2} = params, socket) do
     {:noreply,
      assign(socket,
        form: to_form(params, errors: []),
-       result: result
+       result: anagram?(word1, word2) |> get_result_message()
      )}
   end
 
-  def is_anagram(word1, word2) do
+  def anagram?(word1, word2) do
     if String.length(word1) == String.length(word2) do
-      word1_list = String.to_charlist(word1) |> Enum.sort()
-      word2_list = String.to_charlist(word2) |> Enum.sort()
-      word1_list == word2_list
+      list1 = String.to_charlist(word1) |> Enum.sort()
+      list2 = String.to_charlist(word2) |> Enum.sort()
+      list1 == list2
     else
       false
     end
   end
+
+  def get_result_message(true), do: "애너그램 입니다."
+  def get_result_message(false), do: "애너그램이 아닙니다."
 end
