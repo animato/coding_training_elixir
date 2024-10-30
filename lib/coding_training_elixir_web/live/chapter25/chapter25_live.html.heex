@@ -1,0 +1,31 @@
+<.flash_group flash={@flash} />
+<div class="w-96 mx-auto">
+  <div class="max-w-md mb-4 flex justify-end ">
+    <form id="monthForm" class="space-y-4" phx-change="change_language">
+      <select
+        id="language"
+        name="language"
+        class="block w-32 px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+      >
+        <option selected={@locale == "ko"} value="ko">한국어</option>
+        <%!-- <option selected={@locale == "en"} value="en">English</option> --%>
+      </select>
+    </form>
+  </div>
+  <div class="bg-white p-8 rounded-lg shadow-md w-96 mx-auto">
+    <h1 class="text-2xl font-bold mb-6 text-center">Chapter 25 암호 길이 점검</h1>
+    <p>암호 길이 점검</p>
+    <form class="space-y-4" phx-submit="submit">
+      <.input field={@form[:password]} type="text" label="암호" />
+      <button
+        type="submit"
+        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        확인
+      </button>
+    </form>
+    <div :if={@result} id="result" class="mt-4 text-center text-lg font-semibold">
+      <%= @result %>
+    </div>
+  </div>
+</div>
