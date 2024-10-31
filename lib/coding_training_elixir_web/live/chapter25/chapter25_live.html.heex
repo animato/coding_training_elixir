@@ -14,18 +14,32 @@
   </div>
   <div class="bg-white p-8 rounded-lg shadow-md w-96 mx-auto">
     <h1 class="text-2xl font-bold mb-6 text-center">Chapter 25 암호 길이 점검</h1>
-    <p>암호 길이 점검</p>
-    <form class="space-y-4" phx-submit="submit">
-      <.input field={@form[:password]} type="text" label="암호" />
-      <button
-        type="submit"
-        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-      >
-        확인
-      </button>
+    <li>아주 강력한 암호: 숫자와 영문자 특수문자가 포함되어 있고 길이가 8자 이상</li>
+    <li>강력한 암호: 숫자와 영문자가 포함되어 있고 길이가 8자 이상</li>
+    <li>취약한 암호: 영문자가 포함되어 있고 길이가 8자 미만</li>
+    <li>아주 취약한 암호: 숫자만 있고 길이가 8자 미만</li>
+    <form class="space-y-4" phx-change="change">
+      <%!-- <.input field={@form[:password]} type="text" label="암호" /> --%>
+      <div class="space-y-2">
+        <label for="password" class="block text-sm font-medium text-gray-700">암호</label>
+        <input
+          type="text"
+          id="password"
+          name="password"
+          class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
+                 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        />
+      </div>
+      <div class="space-y-2">
+        <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+          <div
+            id="strength-meter"
+            class={"h-full transition-all duration-300 ease-in-out #{@result.class}"}
+          >
+          </div>
+        </div>
+        <p id="strength-text" class="text-sm font-medium text-center"><%= @result.text %></p>
+      </div>
     </form>
-    <div :if={@result} id="result" class="mt-4 text-center text-lg font-semibold">
-      <%= @result %>
-    </div>
   </div>
 </div>

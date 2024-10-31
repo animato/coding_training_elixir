@@ -9,7 +9,7 @@ defmodule CodingTrainingElixirWeb.Chapter25Live do
       assign(socket,
         form: to_form(%{"password" => nil}, errors: []),
         locale: locale,
-        result: nil
+        result: %{text: "", class: ""}
       )
 
     {:ok, socket}
@@ -19,15 +19,20 @@ defmodule CodingTrainingElixirWeb.Chapter25Live do
     {:noreply, redirect(socket, to: ~p"/chapter25?locale=#{language}")}
   end
 
-  def handle_event("submit", %{"password" => password} = params, socket) do
-    IO.puts(password)
+  def handle_event("change", %{"password" => password} = params, socket) do
+    result = password_validator(password)
 
     {:noreply,
      assign(socket,
        form: to_form(params, errors: []),
-       result: password_validator(password)
+       result: strength_class(result)
      )}
   end
+
+  def strength_class(:very_strong), do: %{text: "아주 강력한 암호", class: "bg-green-500 w-full"}
+  def strength_class(:strong), do: %{text: "강력한 암호", class: "bg-yellow-500 w-3/4"}
+  def strength_class(:weak), do: %{text: "취약한 암호", class: "bg-orange-500 w-2/4"}
+  def strength_class(:very_weak), do: %{text: "아주 취약한 암호", class: "bg-red-500 w-1/4"}
 
   def password_validator(password) do
     cond do
