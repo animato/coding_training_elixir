@@ -1,0 +1,76 @@
+<.flash_group flash={@flash} />
+<div class="w-96 mx-auto">
+  <div class="bg-white rounded-lg shadow-md p-8 w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-6 text-gray-800">Chapter 25 입력값 검증</h1>
+
+    <form method="POST" class="space-y-6" phx-change="change">
+      <div class="space-y-2">
+        <label for="firstName" class="block text-sm font-medium text-gray-700">
+          Enter the first name:
+        </label>
+        <input
+          type="text"
+          id="firstName"
+          name="firstName"
+          required
+          minlength="2"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+        />
+        <p id="firstNameError" class="mt-1 text-sm text-red-600 hidden"></p>
+      </div>
+
+      <div class="space-y-2">
+        <label for="lastName" class="block text-sm font-medium text-gray-700">
+          Enter the last name:
+        </label>
+        <input
+          type="text"
+          id="lastName"
+          name="lastName"
+          required
+          minlength="2"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+        />
+        <p id="lastNameError" class="mt-1 text-sm text-red-600 hidden"></p>
+      </div>
+
+      <div class="space-y-2">
+        <label for="zipCode" class="block text-sm font-medium text-gray-700">
+          Enter the ZIP code:
+        </label>
+        <input
+          type="text"
+          id="zipCode"
+          name="zipCode"
+          required
+          pattern="[0-9]+"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+        />
+        <p id="zipCodeError" class="mt-1 text-sm text-red-600 hidden"></p>
+      </div>
+
+      <div class="space-y-2">
+        <label for="employeeId" class="block text-sm font-medium text-gray-700">
+          Enter an employee ID:
+        </label>
+        <input
+          type="text"
+          id="employeeId"
+          name="employeeId"
+          required
+          pattern="[A-Z]{2}-[0-9]{4}"
+          placeholder="AA-1234"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+        />
+        <p id="employeeIdError" class="mt-1 text-sm text-red-600 hidden"></p>
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white rounded-md py-2 px-4 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      >
+        제출
+      </button>
+    </form>
+  </div>
+</div>
