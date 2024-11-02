@@ -24,10 +24,18 @@ defmodule CodingTrainingElixirWeb.Chapter27Live do
 
   def validate_input(params) do
     validate_map = %{
-      "firstName" => fn x -> not_blank?(x) and String.length(x) >= 2 end,
-      "lastName" => fn x -> not_blank?(x) and String.length(x) >= 2 end,
-      "zipCode" => fn x -> is_numeric?(x) end,
-      "employeeId" => fn x -> is_valid_employee_id?(x) end
+      "firstName" => fn x ->
+        if (not_blank?(x) and String.length(x) >= 2) == false, do: "2글자 이상이어야 합니다."
+      end,
+      "lastName" => fn x ->
+        if (not_blank?(x) and String.length(x) >= 2) == false, do: "2글자 이상이어야 합니다."
+      end,
+      "zipCode" => fn x ->
+        if is_numeric?(x) == false, do: "숫자여야 합니다."
+      end,
+      "employeeId" => fn x ->
+        if is_valid_employee_id?(x) == false, do: "ID 형식이 잘못되었습니다."
+      end
     }
 
     Enum.each(params, fn {key, value} ->
