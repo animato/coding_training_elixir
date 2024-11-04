@@ -12,11 +12,12 @@
           type="text"
           id="firstName"
           name="firstName"
+          value={@form.params["firstName"]}
           required
           minlength="2"
           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
         />
-        <p id="firstNameError" class="mt-1 text-sm text-red-600 hidden"></p>
+        <.error :for={msg <- @form[:firstName].errors}><%= elem(msg, 0) %></.error>
       </div>
 
       <div class="space-y-2">
@@ -27,11 +28,12 @@
           type="text"
           id="lastName"
           name="lastName"
+          value={@form.params["lastName"]}
           required
           minlength="2"
           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
         />
-        <p id="lastNameError" class="mt-1 text-sm text-red-600 hidden"></p>
+        <.error :for={msg <- @form[:lastName].errors}><%= elem(msg, 0) %></.error>
       </div>
 
       <div class="space-y-2">
@@ -42,11 +44,12 @@
           type="text"
           id="zipCode"
           name="zipCode"
+          value={@form.params["zipCode"]}
           required
           pattern="[0-9]+"
           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
         />
-        <p id="zipCodeError" class="mt-1 text-sm text-red-600 hidden"></p>
+        <.error :for={msg <- @form[:zipCode].errors}><%= elem(msg, 0) %></.error>
       </div>
 
       <div class="space-y-2">
@@ -57,12 +60,13 @@
           type="text"
           id="employeeId"
           name="employeeId"
+          value={@form.params["employeeId"]}
           required
           pattern="[A-Z]{2}-[0-9]{4}"
           placeholder="AA-1234"
           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
         />
-        <p id="employeeIdError" class="mt-1 text-sm text-red-600 hidden"></p>
+        <.error :for={msg <- @form[:employeeId].errors}><%= elem(msg, 0) %></.error>
       </div>
 
       <button

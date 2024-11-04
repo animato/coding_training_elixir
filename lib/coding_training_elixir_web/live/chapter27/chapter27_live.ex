@@ -7,25 +7,27 @@ defmodule CodingTrainingElixirWeb.Chapter27Live do
 
     socket =
       assign(socket,
-        form: to_form(%{}, errors: [])
+        form: to_form(%{"firstName" => nil, "lastName" => nil}, errors: [])
       )
 
     {:ok, socket}
   end
 
   def handle_event("change", params, socket) do
-    validate_input(params)
+    errors = validate_input(params)
+
+    IO.inspect(errors)
 
     {:noreply,
      assign(socket,
-       form: to_form(params, errors: [])
+       form: to_form(params, errors: errors)
      )}
   end
 
   def validate_input(params) do
     validate_map = %{
       "firstName" => fn x ->
-        if (not_blank?(x) and String.length(x) >= 2) == false, do: "2글자 이상이어야 합니다."
+        if (not_blank?(x) and String.length(x) >= 2) == false, do: "2글자 이상이어야 합니다.", else: ""
       end,
       "lastName" => fn x ->
         if (not_blank?(x) and String.length(x) >= 2) == false, do: "2글자 이상이어야 합니다."
@@ -38,10 +40,13 @@ defmodule CodingTrainingElixirWeb.Chapter27Live do
       end
     }
 
-    Enum.each(params, fn {key, value} ->
-      validate = Map.get(validate_map, key, fn _ -> true end)
-      IO.puts("#{key} #{value} #{validate.(value)}")
-    end)
+    result =
+      Enum.map(params, fn {key, value} ->
+        validate = Map.get(validate_map, key, fn _ -> "" end)
+        {String.to_atom(key), {validate.(value), []}}
+      end)
+
+    result
   end
 
   def not_blank?(string) when is_binary(string) do
