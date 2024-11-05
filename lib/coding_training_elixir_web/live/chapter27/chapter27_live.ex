@@ -16,8 +16,6 @@ defmodule CodingTrainingElixirWeb.Chapter27Live do
   def handle_event("change", params, socket) do
     errors = validate_input(params)
 
-    IO.inspect(errors)
-
     {:noreply,
      assign(socket,
        form: to_form(params, errors: errors)
@@ -33,10 +31,10 @@ defmodule CodingTrainingElixirWeb.Chapter27Live do
         if (not_blank?(x) and String.length(x) >= 2) == false, do: "2글자 이상이어야 합니다."
       end,
       "zipCode" => fn x ->
-        if is_numeric?(x) == false, do: "숫자여야 합니다."
+        if numeric?(x) == false, do: "숫자여야 합니다."
       end,
       "employeeId" => fn x ->
-        if is_valid_employee_id?(x) == false, do: "ID 형식이 잘못되었습니다."
+        if valid_employee_id?(x) == false, do: "ID 형식이 잘못되었습니다."
       end
     }
 
@@ -55,15 +53,15 @@ defmodule CodingTrainingElixirWeb.Chapter27Live do
 
   def not_blank?(_), do: false
 
-  def is_numeric?(string) when is_binary(string) do
+  def numeric?(string) when is_binary(string) do
     Regex.match?(~r/^\d+$/, string)
   end
 
-  def is_numeric?(_), do: false
+  def numeric?(_), do: false
 
-  def is_valid_employee_id?(string) when is_binary(string) do
+  def valid_employee_id?(string) when is_binary(string) do
     Regex.match?(~r/^[A-Z]{2}-[0-9]{4}$/, string)
   end
 
-  def is_valid_employee_id?(_), do: false
+  def valid_employee_id?(_), do: false
 end

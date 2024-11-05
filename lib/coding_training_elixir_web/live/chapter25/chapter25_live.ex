@@ -36,20 +36,32 @@ defmodule CodingTrainingElixirWeb.Chapter25Live do
 
   def password_validator(password) do
     cond do
-      has_number?(password) and has_alphabet?(password) and
-        has_special?(password) and String.length(password) >= 8 ->
+      very_strong_password?(password) ->
         :very_strong
 
-      has_number?(password) and has_alphabet?(password) and
-          String.length(password) >= 8 ->
+      strong_password?(password) ->
         :strong
 
-      has_alphabet?(password) and String.length(password) < 8 ->
+      weak_password?(password) ->
         :weak
 
       true ->
         :very_weak
     end
+  end
+
+  def very_strong_password?(password) do
+    has_number?(password) and has_alphabet?(password) and
+      has_special?(password) and String.length(password) >= 8
+  end
+
+  def strong_password?(password) do
+    has_number?(password) and has_alphabet?(password) and
+      String.length(password) >= 8
+  end
+
+  def weak_password?(password) do
+    has_alphabet?(password) and String.length(password) < 8
   end
 
   def has_number?(password) do
