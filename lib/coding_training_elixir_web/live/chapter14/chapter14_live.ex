@@ -22,20 +22,26 @@ defmodule CodingTrainingElixirWeb.Chapter14Live do
     case socket.assigns.form1.valid do
       true ->
         subtotal = socket.assigns.form1.order.value
+        tax = tax(subtotal, socket.assigns.form1.state.value)
 
-        if Enum.any?(@wisconsin, fn x ->
-             String.downcase(socket.assigns.form1.state.value) == x
-           end) do
-          tax = subtotal * 5.5 / 100
+        if tax > 0 do
           result = "The tax is #{tax} <br/> The total is #{tax + subtotal}"
+          {:noreply, assign(socket, result1: result)}
+        else
+          result = "The total is #{subtotal}"
           {:noreply, assign(socket, result1: result)}
         end
 
-        result = "The total is #{subtotal}"
-        {:noreply, assign(socket, result1: result)}
-
       false ->
         {:noreply, socket}
+    end
+  end
+
+  def tax(subtotal, state) do
+    if Enum.any?(@wisconsin, fn x -> String.downcase(state) == x end) do
+      subtotal * 5.5 / 100
+    else
+      0
     end
   end
 
