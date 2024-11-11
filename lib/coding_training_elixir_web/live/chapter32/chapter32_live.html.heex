@@ -5,16 +5,36 @@
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">난이도 선택:</h2>
     <div class="flex space-x-2">
-      <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex-1">
+      <button
+        phx-click="start"
+        phx-value-max="10"
+        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex-1"
+      >
         쉬움 (1-10)
       </button>
-      <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded flex-1">
+      <button
+        phx-click="start"
+        phx-value-max="100"
+        class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded flex-1"
+      >
         보통 (1-100)
       </button>
-      <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded flex-1">
+      <button
+        phx-click="start"
+        phx-value-max="1000"
+        class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded flex-1"
+      >
         어려움 (1-1000)
       </button>
     </div>
+  </div>
+
+  <div class="text-center font-semibold mb-4">
+    <%= if @game_active, do: "게임 진행 중 - 시도 횟수: #{@attempts}", else: "게임 대기 중" %>
+  </div>
+
+  <div class="text-center mb-4">
+    경과 시간: <%= @timer %>
   </div>
 
   <div class="mb-6">
@@ -25,7 +45,10 @@
     />
   </div>
 
-  <button class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mb-4">
+  <button
+    class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mb-4"
+    disabled
+  >
     제출
   </button>
 
