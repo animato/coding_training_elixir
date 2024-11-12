@@ -10,8 +10,10 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
         form: to_form(%{}, errors: []),
         result: nil,
         game_active: false,
+        previous_guesses: [],
         attempts: 0,
-        timer: 0
+        timer: 0,
+        timer_ref: nil
       )
 
     {:ok, socket}
@@ -24,22 +26,43 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
     IO.inspect(max_number)
     IO.inspect(secret_number)
 
+    {:ok, timer_ref} = :timer.send_interval(1000, self(), :tick)
+
     {:noreply,
      assign(socket,
        form: to_form(params, errors: []),
        result: nil,
        secret_number: secret_number,
        game_active: true,
+       previous_guesses: [],
        attempts: 0,
-       timer: 0
+       timer: 0,
+       timer_ref: timer_ref
      )}
   end
 
-  def handle_event("submit", %{} = params, socket) do
+  def handle_event("submit", %{"guess" => guess} = params, socket) do
+    previous_guesses = [guess | socket.assigns.previous_guesses]
+
+    {result, game_active} =
+      if socket.assigns.secret_number == String.to_integer(guess) do
+        :timer.cancel(socket.assigns.timer_ref)
+        {"정답", false}
+      else
+        {"오답", true}
+      end
+
     {:noreply,
      assign(socket,
        form: to_form(params, errors: []),
-       result: nil
+       result: result,
+       game_active: game_active,
+       previous_guesses: previous_guesses,
+       attempts: socket.assigns.attempts + 1
      )}
+  end
+
+  def handle_info(:tick, socket) do
+    {:noreply, update(socket, :timer, fn timer -> timer + 1 end)}
   end
 end
