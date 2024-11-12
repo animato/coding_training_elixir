@@ -44,13 +44,11 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
   def handle_event("submit", %{"guess" => guess} = params, socket) do
     previous_guesses = [guess | socket.assigns.previous_guesses]
 
-    {result, game_active} =
-      if socket.assigns.secret_number == String.to_integer(guess) do
-        :timer.cancel(socket.assigns.timer_ref)
-        {"정답", false}
-      else
-        {"오답", true}
-      end
+    {result, game_active} = check_guess(socket.assigns.secret_number, String.to_integer(guess))
+
+    if not game_active do
+      :timer.cancel(socket.assigns.timer_ref)
+    end
 
     {:noreply,
      assign(socket,
@@ -60,6 +58,18 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
        previous_guesses: previous_guesses,
        attempts: socket.assigns.attempts + 1
      )}
+  end
+
+  def check_guess(answer, guess) when answer == guess do
+    {"정답", false}
+  end
+
+  def check_guess(answer, guess) when answer > guess do
+    {"추측한 숫자가 답보다 낮음", true}
+  end
+
+  def check_guess(answer, guess) when answer < guess do
+    {"추측한 숫자가 답보다 높음", true}
   end
 
   def handle_info(:tick, socket) do
