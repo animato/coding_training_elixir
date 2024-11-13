@@ -9,11 +9,13 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
       assign(socket,
         form: to_form(%{}, errors: []),
         result: nil,
+        max: nil,
         game_active: false,
         previous_guesses: [],
         attempts: 0,
         timer: 0,
-        timer_ref: nil
+        timer_ref: nil,
+        user_id: String.to_atom(:crypto.strong_rand_bytes(8) |> Base.encode16(case: :lower))
       )
 
     {:ok, socket}
@@ -23,8 +25,12 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
     max_number = String.to_integer(max)
     secret_number = :rand.uniform(max_number)
 
-    IO.inspect(max_number)
-    IO.inspect(secret_number)
+    {:ok, agent} =
+      Agent.start_link(fn -> secret_number end, name: socket.assigns.user_id)
+
+    if socket.assigns.timer_ref != nil do
+      :timer.cancel(socket.assigns.timer_ref)
+    end
 
     {:ok, timer_ref} = :timer.send_interval(1000, self(), :tick)
 
@@ -32,7 +38,7 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
      assign(socket,
        form: to_form(params, errors: []),
        result: nil,
-       secret_number: secret_number,
+       max: max_number,
        game_active: true,
        previous_guesses: [],
        attempts: 0,
@@ -43,11 +49,13 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
 
   def handle_event("submit", %{"guess" => guess} = params, socket) do
     previous_guesses = [guess | socket.assigns.previous_guesses]
+    secret_number = Agent.get(socket.assigns.user_id, & &1)
 
-    {result, game_active} = check_guess(socket.assigns.secret_number, String.to_integer(guess))
+    {result, game_active} = check_guess(secret_number, String.to_integer(guess))
 
     if not game_active do
       :timer.cancel(socket.assigns.timer_ref)
+      Agent.stop(socket.assigns.user_id, :normal)
     end
 
     {:noreply,
@@ -59,6 +67,10 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
        attempts: socket.assigns.attempts + 1
      )}
   end
+
+  # def start_game(max_number) do
+  #   %{secret_number: :rand.uniform(max_number), attempts: 0, previous_guesses: []}
+  # end
 
   def check_guess(answer, guess) when answer == guess do
     {"정답", false}
