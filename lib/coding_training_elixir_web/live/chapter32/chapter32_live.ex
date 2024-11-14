@@ -25,14 +25,19 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
     max_number = String.to_integer(max)
     secret_number = :rand.uniform(max_number)
 
+    {:ok, timer_ref} = :timer.send_interval(1000, self(), :tick)
+
     {:ok, agent} =
-      Agent.start_link(fn -> secret_number end, name: socket.assigns.user_id)
+      Agent.start_link(
+        fn ->
+          %{secret_number: secret_number, previous_guesses: [], timer_ref: timer_ref, attempts: 0}
+        end,
+        name: socket.assigns.user_id
+      )
 
     if socket.assigns.timer_ref != nil do
       :timer.cancel(socket.assigns.timer_ref)
     end
-
-    {:ok, timer_ref} = :timer.send_interval(1000, self(), :tick)
 
     {:noreply,
      assign(socket,
@@ -48,8 +53,14 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
   end
 
   def handle_event("submit", %{"guess" => guess} = params, socket) do
-    previous_guesses = [guess | socket.assigns.previous_guesses]
-    secret_number = Agent.get(socket.assigns.user_id, & &1)
+    %{secret_number: secret_number, previous_guesses: previous_guesses, attempts: attempts} =
+      Agent.get(socket.assigns.user_id, & &1)
+
+    new = [guess | previous_guesses]
+
+    Agent.update(socket.assigns.user_id, fn x ->
+      %{x | previous_guesses: new, attempts: attempts + 1}
+    end)
 
     {result, game_active} = check_guess(secret_number, String.to_integer(guess))
 
@@ -63,8 +74,8 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
        form: to_form(params, errors: []),
        result: result,
        game_active: game_active,
-       previous_guesses: previous_guesses,
-       attempts: socket.assigns.attempts + 1
+       previous_guesses: new,
+       attempts: attempts + 1
      )}
   end
 
