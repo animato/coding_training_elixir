@@ -1,5 +1,6 @@
 defmodule CodingTrainingElixirWeb.Chapter32Live do
   use CodingTrainingElixirWeb, :live_view
+  alias CodingTrainingElixirWeb.NumberGuessingGameAgent
 
   def mount(params, _session, socket) do
     locale = Map.get(params, "locale", "ko")
@@ -12,9 +13,7 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
         max: nil,
         game_active: false,
         previous_guesses: [],
-        attempts: 0,
         timer: 0,
-        timer_ref: nil,
         user_id: String.to_atom(:crypto.strong_rand_bytes(8) |> Base.encode16(case: :lower))
       )
 
@@ -23,76 +22,31 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
 
   def handle_event("start", %{"max" => max} = params, socket) do
     max_number = String.to_integer(max)
-    secret_number = :rand.uniform(max_number)
 
-    {:ok, timer_ref} = :timer.send_interval(1000, self(), :tick)
-
-    {:ok, agent} =
-      Agent.start_link(
-        fn ->
-          %{secret_number: secret_number, previous_guesses: [], timer_ref: timer_ref, attempts: 0}
-        end,
-        name: socket.assigns.user_id
-      )
-
-    if socket.assigns.timer_ref != nil do
-      :timer.cancel(socket.assigns.timer_ref)
-    end
+    {:ok, result_map} =
+      NumberGuessingGameAgent.start_game(socket.assigns.user_id, max_number, self())
 
     {:noreply,
      assign(socket,
        form: to_form(params, errors: []),
-       result: nil,
-       max: max_number,
-       game_active: true,
-       previous_guesses: [],
-       attempts: 0,
-       timer: 0,
-       timer_ref: timer_ref
+       result: result_map.result,
+       game_active: result_map.game_active,
+       previous_guesses: result_map.previous_guesses,
+       attempts: result_map.attempts
      )}
   end
 
   def handle_event("submit", %{"guess" => guess} = params, socket) do
-    %{secret_number: secret_number, previous_guesses: previous_guesses, attempts: attempts} =
-      Agent.get(socket.assigns.user_id, & &1)
-
-    new = [guess | previous_guesses]
-
-    Agent.update(socket.assigns.user_id, fn x ->
-      %{x | previous_guesses: new, attempts: attempts + 1}
-    end)
-
-    {result, game_active} = check_guess(secret_number, String.to_integer(guess))
-
-    if not game_active do
-      :timer.cancel(socket.assigns.timer_ref)
-      Agent.stop(socket.assigns.user_id, :normal)
-    end
+    result_map = NumberGuessingGameAgent.guess_number(socket.assigns.user_id, guess)
 
     {:noreply,
      assign(socket,
        form: to_form(params, errors: []),
-       result: result,
-       game_active: game_active,
-       previous_guesses: new,
-       attempts: attempts + 1
+       result: result_map.result,
+       game_active: result_map.game_active,
+       previous_guesses: result_map.previous_guesses,
+       attempts: result_map.attempts
      )}
-  end
-
-  # def start_game(max_number) do
-  #   %{secret_number: :rand.uniform(max_number), attempts: 0, previous_guesses: []}
-  # end
-
-  def check_guess(answer, guess) when answer == guess do
-    {"정답", false}
-  end
-
-  def check_guess(answer, guess) when answer > guess do
-    {"추측한 숫자가 답보다 낮음", true}
-  end
-
-  def check_guess(answer, guess) when answer < guess do
-    {"추측한 숫자가 답보다 높음", true}
   end
 
   def handle_info(:tick, socket) do
