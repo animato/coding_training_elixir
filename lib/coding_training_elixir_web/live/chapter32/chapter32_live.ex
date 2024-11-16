@@ -9,8 +9,8 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
     socket =
       assign(socket,
         form: to_form(%{}, errors: []),
-        result: nil,
-        max: nil,
+        result: "게임을 시작하려면 난이도를 선택하세요.",
+        max_number: nil,
         game_active: false,
         previous_guesses: [],
         timer: 0,
@@ -29,8 +29,10 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
     {:noreply,
      assign(socket,
        form: to_form(params, errors: []),
+       max_number: max,
        result: result_map.result,
        game_active: result_map.game_active,
+       game_mode: "mode",
        previous_guesses: result_map.previous_guesses,
        attempts: result_map.attempts
      )}
@@ -46,6 +48,20 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
        game_active: result_map.game_active,
        previous_guesses: result_map.previous_guesses,
        attempts: result_map.attempts
+     )}
+  end
+
+  def handle_event("reset", params, socket) do
+    NumberGuessingGameAgent.reset(socket.assigns.user_id)
+
+    {:noreply,
+     assign(socket,
+       form: to_form(%{}, errors: []),
+       result: "게임을 시작하려면 난이도를 선택하세요.",
+       max_number: nil,
+       game_active: false,
+       previous_guesses: [],
+       timer: 0
      )}
   end
 
