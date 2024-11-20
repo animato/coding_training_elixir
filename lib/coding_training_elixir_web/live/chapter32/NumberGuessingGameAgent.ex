@@ -23,41 +23,32 @@ defmodule CodingTrainingElixirWeb.NumberGuessingGameAgent do
   end
 
   def guess_number(user_id, guess) do
-    %{
-      secret_number: secret_number,
-      previous_guesses: previous_guesses,
-      attempts: attempts
-    } =
-      Agent.get(user_id, & &1)
+    Agent.get_and_update(user_id, fn state ->
+      new_state = %{
+        state
+        | previous_guesses: [guess | state.previous_guesses],
+          attempts: state.attempts + 1
+      }
 
-    new = [guess | previous_guesses]
-
-    Agent.update(user_id, fn x ->
-      %{x | previous_guesses: new, attempts: attempts + 1}
+      {
+        {
+          check_guess(state.secret_number, String.to_integer(guess)),
+          new_state.previous_guesses,
+          new_state.attempts
+        },
+        new_state
+      }
     end)
-
-    {result, game_active} = check_guess(secret_number, String.to_integer(guess))
-
-    if not game_active do
-      reset(user_id)
-    end
-
-    %{result: result, game_active: game_active, previous_guesses: new, attempts: attempts + 1}
   end
 
   def reset(user_id) do
-    Agent.stop(user_id, :normal)
+    case Process.whereis(user_id) do
+      nil -> false
+      pid -> if Process.alive?(pid), do: Agent.stop(user_id, :normal)
+    end
   end
 
-  defp check_guess(answer, guess) when answer == guess do
-    {"정답", false}
-  end
-
-  defp check_guess(answer, guess) when answer > guess do
-    {"추측한 숫자가 답보다 낮음", true}
-  end
-
-  defp check_guess(answer, guess) when answer < guess do
-    {"추측한 숫자가 답보다 높음", true}
-  end
+  defp check_guess(answer, guess) when answer == guess, do: :correct
+  defp check_guess(answer, guess) when answer > guess, do: :below
+  defp check_guess(answer, guess) when answer < guess, do: :above
 end

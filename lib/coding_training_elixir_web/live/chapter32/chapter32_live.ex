@@ -38,6 +38,7 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
          game_active: true,
          previous_guesses: [],
          attempts: 0,
+         timer: 0,
          timer_ref: timer_ref
        )}
     else
@@ -49,17 +50,21 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
   end
 
   def handle_event("submit", %{"guess" => guess} = params, socket) do
-    result_map = NumberGuessingGameAgent.guess_number(socket.assigns.user_id, guess)
+    {result, previous_guesses, attempts} =
+      NumberGuessingGameAgent.guess_number(socket.assigns.user_id, guess)
 
-    if not result_map.game_active, do: cancel_timer(socket.assigns.timer_ref)
+    if result == :correct do
+      cancel_timer(socket.assigns.timer_ref)
+      NumberGuessingGameAgent.reset(socket.assigns.user_id)
+    end
 
     {:noreply,
      assign(socket,
        form: to_form(params, errors: []),
-       result: result_map.result,
-       game_active: result_map.game_active,
-       previous_guesses: result_map.previous_guesses,
-       attempts: result_map.attempts
+       result: result_to_msg(result),
+       game_active: game_active?(result),
+       previous_guesses: previous_guesses,
+       attempts: attempts
      )}
   end
 
@@ -83,14 +88,19 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
     {:noreply, update(socket, :timer, fn timer -> timer + 1 end)}
   end
 
-  def terminate(reason, socket) do
+  def terminate(_reason, socket) do
     # 사용자의 Agent를 종료
-
-    IO.inspect(reason)
     NumberGuessingGameAgent.reset(socket.assigns.user_id)
     cancel_timer(socket.assigns.timer_ref)
     :ok
   end
+
+  defp game_active?(:correct), do: false
+  defp game_active?(_), do: true
+
+  defp result_to_msg(:correct), do: "정답입니다."
+  defp result_to_msg(:below), do: "추측한 숫자가 답보다 낮음"
+  defp result_to_msg(:above), do: "추측한 숫자가 답보다 높음"
 
   defp cancel_timer(timer_ref) when timer_ref != nil, do: :timer.cancel(timer_ref)
   defp cancel_timer(nil), do: nil
