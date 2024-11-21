@@ -24,19 +24,13 @@ defmodule CodingTrainingElixirWeb.NumberGuessingGameAgent do
 
   def guess_number(user_id, guess) do
     Agent.get_and_update(user_id, fn state ->
-      new_state = %{
-        state
-        | previous_guesses: [guess | state.previous_guesses],
-          attempts: state.attempts + 1
-      }
+      guess_result = check_guess(state.secret_number, String.to_integer(guess))
+      new_previous_guesses = [guess | state.previous_guesses]
+      new_attempts = state.attempts + 1
 
       {
-        {
-          check_guess(state.secret_number, String.to_integer(guess)),
-          new_state.previous_guesses,
-          new_state.attempts
-        },
-        new_state
+        {guess_result, new_previous_guesses, new_attempts},
+        %{state | previous_guesses: new_previous_guesses, attempts: new_attempts}
       }
     end)
   end
