@@ -104,4 +104,10 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
 
   defp cancel_timer(timer_ref) when timer_ref != nil, do: :timer.cancel(timer_ref)
   defp cancel_timer(nil), do: nil
+
+  defp format_time(seconds) do
+    minutes = div(seconds, 60)
+    seconds = rem(seconds, 60)
+    :io_lib.format("~2..0B:~2..0B", [minutes, seconds])
+  end
 end
