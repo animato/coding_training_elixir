@@ -61,7 +61,7 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
     {:noreply,
      assign(socket,
        form: to_form(params, errors: []),
-       result: result_to_msg(result),
+       result: result_to_msg(result, attempts),
        game_active: game_active?(result),
        previous_guesses: previous_guesses,
        attempts: attempts
@@ -98,9 +98,12 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
   defp game_active?(:correct), do: false
   defp game_active?(_), do: true
 
-  defp result_to_msg(:correct), do: "정답입니다."
-  defp result_to_msg(:below), do: "추측한 숫자가 답보다 낮음"
-  defp result_to_msg(:above), do: "추측한 숫자가 답보다 높음"
+  defp result_to_msg(:correct, count) when count == 1, do: "당신은 독심술사군요!"
+  defp result_to_msg(:correct, count) when count < 5, do: "정말 인상적이에요."
+  defp result_to_msg(:correct, count) when count < 7, do: "좀 더 잘할 수 있을 거예요."
+  defp result_to_msg(:correct, count) when count >= 7, do: "다음엔 더 잘할 수 있을 거예요."
+  defp result_to_msg(:below, _), do: "추측한 숫자가 답보다 낮음"
+  defp result_to_msg(:above, _), do: "추측한 숫자가 답보다 높음"
 
   defp cancel_timer(timer_ref) when timer_ref != nil, do: :timer.cancel(timer_ref)
   defp cancel_timer(nil), do: nil
