@@ -22,14 +22,10 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
   end
 
   def handle_event("start", %{"max" => max} = params, socket) do
-    max_number = String.to_integer(max)
-
-    {start, _} =
-      NumberGuessingGameAgent.start_game(socket.assigns.user_id, max_number)
-
-    if start == :ok do
-      {:ok, timer_ref} = :timer.send_interval(1000, self(), :tick)
-
+    with {max_number, ""} <- Integer.parse(max),
+         {:ok, _} =
+           NumberGuessingGameAgent.start_game(socket.assigns.user_id, max_number),
+         {:ok, timer_ref} = :timer.send_interval(1000, self(), :tick) do
       {:noreply,
        assign(socket,
          form: to_form(params, errors: []),
@@ -40,11 +36,6 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
          attempts: 0,
          timer: 0,
          timer_ref: timer_ref
-       )}
-    else
-      {:noreply,
-       assign(socket,
-         form: to_form(params, errors: [])
        )}
     end
   end
