@@ -22,22 +22,26 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
   end
 
   def handle_event("start", %{"max" => max} = params, socket) do
-    with {max_number, ""} <- Integer.parse(max),
-         {:ok, _} =
-           NumberGuessingGameAgent.start_game(socket.assigns.user_id, max_number),
-         {:ok, timer_ref} = :timer.send_interval(1000, self(), :tick) do
-      {:noreply,
-       assign(socket,
-         form: to_form(params, errors: []),
-         max_number: max,
-         result: nil,
-         game_active: true,
-         previous_guesses: [],
-         attempts: 0,
-         timer: 0,
-         timer_ref: timer_ref
-       )}
-    end
+    socket =
+      with {max_number, ""} <- Integer.parse(max),
+           {:ok, _} <-
+             NumberGuessingGameAgent.start_game(socket.assigns.user_id, max_number),
+           {:ok, timer_ref} <- :timer.send_interval(1000, self(), :tick) do
+        assign(socket,
+          max_number: max,
+          result: nil,
+          game_active: true,
+          previous_guesses: [],
+          attempts: 0,
+          timer: 0,
+          timer_ref: timer_ref
+        )
+      end
+
+    {:noreply,
+     assign(socket,
+       form: to_form(params, errors: [])
+     )}
   end
 
   def handle_event("submit", %{"guess" => guess} = params, socket) do
