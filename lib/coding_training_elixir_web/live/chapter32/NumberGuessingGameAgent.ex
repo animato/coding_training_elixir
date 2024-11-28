@@ -25,11 +25,12 @@ defmodule CodingTrainingElixirWeb.NumberGuessingGameAgent do
   def guess_number(user_id, guess) do
     Agent.get_and_update(user_id, fn state ->
       guess_result = check_guess(state.secret_number, String.to_integer(guess))
+      is_dup = Enum.any?(state.previous_guesses, fn x -> x == guess end)
       new_previous_guesses = [guess | state.previous_guesses]
       new_attempts = state.attempts + 1
 
       {
-        {guess_result, new_previous_guesses, new_attempts},
+        {guess_result, new_previous_guesses, new_attempts, is_dup},
         %{state | previous_guesses: new_previous_guesses, attempts: new_attempts}
       }
     end)

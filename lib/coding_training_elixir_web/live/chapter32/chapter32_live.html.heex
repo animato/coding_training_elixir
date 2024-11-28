@@ -51,6 +51,9 @@
     <!-- 결과 메시지가 여기에 표시됩니다 -->
     <%= @result %>
   </div>
+  <div :if={@is_dup} id="dup" class="mb-4 text-center font-bold text-lg">
+    이미 추측했던 숫자 입니다.
+  </div>
 
   <div class="mb-6">
     <h3 class="text-lg font-semibold mb-2">이전 추측:</h3>

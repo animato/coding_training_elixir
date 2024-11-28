@@ -10,6 +10,7 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
       assign(socket,
         form: to_form(%{}, errors: []),
         result: "게임을 시작하려면 난이도를 선택하세요.",
+        is_dup: false,
         max_number: nil,
         game_active: false,
         previous_guesses: [],
@@ -30,6 +31,7 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
         assign(socket,
           max_number: max,
           result: nil,
+          is_dup: false,
           game_active: true,
           previous_guesses: [],
           attempts: 0,
@@ -45,8 +47,10 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
   end
 
   def handle_event("submit", %{"guess" => guess} = params, socket) do
-    {result, previous_guesses, attempts} =
+    {result, previous_guesses, attempts, is_dup} =
       NumberGuessingGameAgent.guess_number(socket.assigns.user_id, guess)
+
+    IO.inspect(is_dup)
 
     if result == :correct do
       cancel_timer(socket.assigns.timer_ref)
@@ -57,6 +61,7 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
      assign(socket,
        form: to_form(params, errors: []),
        result: result_to_msg(result, attempts),
+       is_dup: is_dup,
        game_active: game_active?(result),
        previous_guesses: previous_guesses,
        attempts: attempts
