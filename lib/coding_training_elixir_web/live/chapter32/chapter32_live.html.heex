@@ -1,5 +1,5 @@
 <.flash_group flash={@flash} />
-<div class="bg-white p-8 rounded-lg shadow-md w-full ">
+<%!-- <div class="bg-white p-8 rounded-lg shadow-md w-full ">
   <h1 class="text-3xl font-bold text-center mb-6">숫자 맞추기 게임</h1>
 
   <div class="mb-6">
@@ -48,7 +48,6 @@
   </form>
 
   <div id="result" class="mb-4 text-center font-bold text-lg">
-    <!-- 결과 메시지가 여기에 표시됩니다 -->
     <%= @result %>
   </div>
   <div :if={@is_dup} id="dup" class="mb-4 text-center font-bold text-lg">
@@ -58,11 +57,72 @@
   <div class="mb-6">
     <h3 class="text-lg font-semibold mb-2">이전 추측:</h3>
     <ul id="guesses" class="list-disc pl-5">
-      <!-- 이전 추측들이 여기에 리스트로 표시됩니다 -->
       <%= for guess <- @previous_guesses do %>
         <li><%= guess %></li>
       <% end %>
     </ul>
+  </div>
+
+  <button
+    phx-click="reset"
+    class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded"
+  >
+    새 게임 시작
+  </button>
+</div> --%>
+<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl mx-auto">
+  <h1 class="text-3xl font-bold text-center mb-6">숫자 맞추기 게임</h1>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">난이도 선택:</h2>
+    <div class="flex space-x-2">
+      <%= for {text, max, color} <- [{"쉬움 (1-10)", "10", "blue"}, {"보통 (1-100)", "100", "yellow"}, {"어려움 (1-1000)", "1000", "red"}] do %>
+        <button
+          phx-click="start"
+          phx-value-max={max}
+          class={"bg-#{color}-#{if @max_number == max, do: "600", else: "500"} hover:bg-#{color}-600 text-white font-bold py-2 px-4 rounded flex-1 #{if @game_active, do: "opacity-50 cursor-not-allowed", else: ""}"}
+          disabled={@game_active}
+        >
+          <%= text %>
+        </button>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="text-center font-semibold mb-4">
+    <%= if @game_active, do: "게임 진행 중 - 시도 횟수: #{@attempts}", else: "게임 대기 중" %>
+  </div>
+
+  <div class="text-center mb-4">
+    경과 시간: <%= format_time(@timer) %>
+  </div>
+
+  <%= if @game_active do %>
+    <div class="grid grid-cols-5 gap-4 mb-6">
+      <%= for number <- 1..String.to_integer(@max_number) do %>
+        <button
+          phx-click="submit"
+          phx-value-number={number}
+          class={"w-full aspect-square bg-gradient-to-br from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-bold rounded-lg shadow-md transition-transform transform hover:scale-105 flex items-center justify-center text-2xl #{if number in @previous_guesses, do: "opacity-50 cursor-not-allowed", else: ""}"}
+          disabled={number in @previous_guesses}
+        >
+          <%= number %>
+        </button>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div id="result" class="mb-4 text-center font-bold text-lg">
+    <%= @result %>
+  </div>
+
+  <div class="mb-6">
+    <h3 class="text-lg font-semibold mb-2">이전 추측:</h3>
+    <div class="flex flex-wrap gap-2">
+      <%= for guess <- @previous_guesses do %>
+        <span class="bg-gray-200 text-gray-700 px-2 py-1 rounded"><%= guess %></span>
+      <% end %>
+    </div>
   </div>
 
   <button

@@ -46,11 +46,9 @@ defmodule CodingTrainingElixirWeb.Chapter32Live do
      )}
   end
 
-  def handle_event("submit", %{"guess" => guess} = params, socket) do
+  def handle_event("submit", %{"number" => number} = params, socket) do
     {result, previous_guesses, attempts, is_dup} =
-      NumberGuessingGameAgent.guess_number(socket.assigns.user_id, guess)
-
-    IO.inspect(is_dup)
+      NumberGuessingGameAgent.guess_number(socket.assigns.user_id, number)
 
     if result == :correct do
       cancel_timer(socket.assigns.timer_ref)
