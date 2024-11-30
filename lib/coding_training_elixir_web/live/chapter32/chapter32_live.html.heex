@@ -1,75 +1,5 @@
-<.flash_group flash={@flash} />
-<%!-- <div class="bg-white p-8 rounded-lg shadow-md w-full ">
-  <h1 class="text-3xl font-bold text-center mb-6">숫자 맞추기 게임</h1>
+<%!-- <.flash_group flash={@flash} /> --%>
 
-  <div class="mb-6">
-    <h2 class="text-xl font-semibold mb-2">
-      난이도 선택:
-    </h2>
-    <div class="flex space-x-2">
-      <%= for {mode, max, color} <- [{"쉬움 (1-10)", "10", "blue"}, {"보통 (1-100)", "100", "yellow"}, {"어려움 (1-1000)", "1000", "red"}] do %>
-        <button
-          phx-click="start"
-          phx-value-max={max}
-          class={"bg-#{color}-500 hover:bg-#{color}-600 text-white font-bold py-2 px-4 rounded flex-1 #{if @game_active, do: "cursor-not-allowed", else: ""} #{if @game_active && @max_number != max, do: "opacity-50" }"}
-          disabled={@game_active}
-        >
-          <%= mode %>
-        </button>
-      <% end %>
-    </div>
-  </div>
-  <div class="text-center font-semibold mb-4">
-    <%= if @game_active, do: "게임 진행 중 - 시도 횟수: #{@attempts}", else: "게임 대기 중 - 난이도를 선택하면 시작됩니다." %>
-  </div>
-
-  <div class="text-center mb-4">
-    경과 시간: <%= format_time(@timer) %>
-  </div>
-
-  <form phx-submit="submit">
-    <div class="mb-6">
-      <input
-        name="guess"
-        type="number"
-        placeholder="숫자를 입력하세요"
-        class="w-full p-2 border border-gray-300 rounded"
-        disabled={!@game_active}
-        required
-      />
-    </div>
-
-    <button
-      disabled={!@game_active}
-      class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mb-4 "
-    >
-      제출
-    </button>
-  </form>
-
-  <div id="result" class="mb-4 text-center font-bold text-lg">
-    <%= @result %>
-  </div>
-  <div :if={@is_dup} id="dup" class="mb-4 text-center font-bold text-lg">
-    이미 추측했던 숫자 입니다.
-  </div>
-
-  <div class="mb-6">
-    <h3 class="text-lg font-semibold mb-2">이전 추측:</h3>
-    <ul id="guesses" class="list-disc pl-5">
-      <%= for guess <- @previous_guesses do %>
-        <li><%= guess %></li>
-      <% end %>
-    </ul>
-  </div>
-
-  <button
-    phx-click="reset"
-    class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded"
-  >
-    새 게임 시작
-  </button>
-</div> --%>
 <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl mx-auto">
   <h1 class="text-3xl font-bold text-center mb-6">숫자 맞추기 게임</h1>
 
@@ -98,7 +28,7 @@
   </div>
 
   <%= if @game_active do %>
-    <div class="grid grid-cols-5 gap-4 mb-6">
+    <div class="grid grid-cols-8 gap-4 mb-6">
       <%= for number <- 1..String.to_integer(@max_number) do %>
         <button
           phx-click="submit"
