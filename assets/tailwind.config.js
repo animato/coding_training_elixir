@@ -5,7 +5,16 @@ const plugin = require("tailwindcss/plugin")
 const fs = require("fs")
 const path = require("path")
 
+const colors = ['blue', 'yellow', 'red'];
+const shades = ['500', '600'];
+const states = ['', 'hover:'];
+
 module.exports = {
+  safelist: colors.flatMap(color =>
+    shades.flatMap(shade =>
+      states.map(state => `${state}bg-${color}-${shade}`)
+    )
+  ),
   content: [
     "./js/**/*.js",
     "../lib/coding_training_elixir_web.ex",
