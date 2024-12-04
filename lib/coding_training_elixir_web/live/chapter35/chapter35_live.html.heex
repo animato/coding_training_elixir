@@ -3,7 +3,7 @@
 <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
   <div class="p-8">
     <h1 class="text-2xl font-bold mb-4">우승자 선택 프로그램</h1>
-    <form id="nameForm" class="mb-4">
+    <form id="nameForm" class="mb-4" phx-submit="submit">
       <div class="mb-4">
         <label for="name" class="block text-gray-700 text-sm font-bold mb-2">이름 입력:</label>
         <input
@@ -23,7 +23,11 @@
       </button>
     </form>
 
-    <ul id="nameList" class="list-disc pl-5 mb-4"></ul>
+    <ul id="nameList" class="list-disc pl-5 mb-4">
+      <%= for name <- @list do %>
+        <li><%= name %></li>
+      <% end %>
+    </ul>
 
     <button
       id="selectWinner"

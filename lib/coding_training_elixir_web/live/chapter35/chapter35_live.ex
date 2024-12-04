@@ -7,16 +7,18 @@ defmodule CodingTrainingElixirWeb.Chapter35Live do
 
     socket =
       assign(socket,
-        form: to_form(%{}, errors: [])
+        form: to_form(%{}, errors: []),
+        list: []
       )
 
     {:ok, socket}
   end
 
-  def handle_event("submit", params, socket) do
+  def handle_event("submit", %{"name" => name} = params, socket) do
     {:noreply,
      assign(socket,
-       form: to_form(params, errors: [])
+       form: to_form(params, errors: []),
+       list: [name | socket.assigns.list]
      )}
   end
 end
