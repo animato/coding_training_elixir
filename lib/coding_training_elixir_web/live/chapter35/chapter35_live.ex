@@ -8,7 +8,8 @@ defmodule CodingTrainingElixirWeb.Chapter35Live do
     socket =
       assign(socket,
         form: to_form(%{}, errors: []),
-        list: []
+        list: [],
+        select: nil
       )
 
     {:ok, socket}
@@ -19,6 +20,20 @@ defmodule CodingTrainingElixirWeb.Chapter35Live do
      assign(socket,
        form: to_form(params, errors: []),
        list: [name | socket.assigns.list]
+     )}
+  end
+
+  def handle_event("select", params, socket) do
+    target = socket.assigns.list
+    length = length(socket.assigns.list)
+
+    {select, list} = List.pop_at(target, :rand.uniform(length) - 1)
+
+    {:noreply,
+     assign(socket,
+       form: to_form(params, errors: []),
+       list: list,
+       select: select
      )}
   end
 end
