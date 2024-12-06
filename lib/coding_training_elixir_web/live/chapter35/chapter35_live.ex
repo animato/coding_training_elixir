@@ -24,10 +24,7 @@ defmodule CodingTrainingElixirWeb.Chapter35Live do
   end
 
   def handle_event("select", params, socket) do
-    target = socket.assigns.list
-    length = length(socket.assigns.list)
-
-    {select, list} = List.pop_at(target, :rand.uniform(length) - 1)
+    {select, list} = select_person(socket.assigns.list)
 
     {:noreply,
      assign(socket,
@@ -35,5 +32,14 @@ defmodule CodingTrainingElixirWeb.Chapter35Live do
        list: list,
        select: select
      )}
+  end
+
+  def select_person([]) do
+    {nil, []}
+  end
+
+  def select_person(list) do
+    length = length(list)
+    List.pop_at(list, :rand.uniform(length) - 1)
   end
 end
