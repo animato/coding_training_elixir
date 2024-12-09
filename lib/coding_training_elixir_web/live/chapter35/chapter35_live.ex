@@ -39,7 +39,7 @@ defmodule CodingTrainingElixirWeb.Chapter35Live do
   end
 
   def select_person(list) do
-    length = length(list)
-    List.pop_at(list, :rand.uniform(length) - 1)
+    index = (length(list) |> :rand.uniform()) - 1
+    List.pop_at(list, index)
   end
 end

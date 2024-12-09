@@ -3,39 +3,45 @@
 <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
   <div class="p-8">
     <h1 class="text-2xl font-bold mb-4">우승자 선택 프로그램</h1>
-    <form id="nameForm" class="mb-4" phx-submit="submit">
-      <div class="mb-4">
-        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">이름 입력:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          required
-          minlength="2"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
+    <div class="grid grid-cols-2 gap-4">
+      <div class="border border-gray-400  p-4">
+        <h2>후보 입력</h2>
+        <form id="nameForm" class="mb-4" phx-submit="submit">
+          <div class="mb-4">
+            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">이름:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              minlength="2"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            이름 추가
+          </button>
+        </form>
       </div>
-      <button
-        type="submit"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      >
-        이름 추가
-      </button>
-    </form>
-
-    <ul id="nameList" class="list-disc pl-5 mb-4">
-      <%= for name <- @list do %>
-        <li><%= name %></li>
-      <% end %>
-    </ul>
-
-    <button
-      id="selectWinner"
-      class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-      phx-click="select"
-    >
-      우승자 선택
-    </button>
+      <div class="border border-gray-400 p-4">
+        <h2>후보 목록</h2>
+        <ul id="nameList" class="list-disc pl-5 mb-4">
+          <%= for name <- @list do %>
+            <li><%= name %></li>
+          <% end %>
+        </ul>
+        <button
+          id="selectWinner"
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          phx-click="select"
+        >
+          우승자 선택
+        </button>
+      </div>
+    </div>
 
     <div :if={@select} id="winnerAnnouncement" class="mt-4 p-4 bg-yellow-100 rounded-lg">
       <h2 class="text-xl font-bold text-center">우승자</h2>
