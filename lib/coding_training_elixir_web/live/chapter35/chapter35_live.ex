@@ -34,12 +34,10 @@ defmodule CodingTrainingElixirWeb.Chapter35Live do
      )}
   end
 
-  def select_person([]) do
-    {nil, []}
-  end
+  def select_person([]), do: {nil, []}
 
   def select_person(list) do
-    index = (length(list) |> :rand.uniform()) - 1
-    List.pop_at(list, index)
+    [head | tail] = Enum.shuffle(list)
+    {head, tail}
   end
 end
