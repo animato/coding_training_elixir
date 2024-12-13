@@ -42,3 +42,10 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+window.addEventListener("phx:copy", (event) => {
+  let text = event.target.value; // Alternatively use an element or data tag!
+  navigator.clipboard.writeText(text).then(() => {
+    alert("클립보드로 복사되었습니다.");
+  })
+})
+  

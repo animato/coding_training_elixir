@@ -61,13 +61,14 @@
                 </label>
                 <div class="mt-1 relative">
                   <input
+                    id="password"
                     type="text"
                     readonly
                     value={@password}
                     class="block w-full pr-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                   />
                   <button
-                    phx-click="copy"
+                    phx-click={JS.dispatch("phx:copy", to: "#password")}
                     class="absolute inset-y-0 right-0 px-3 flex items-center bg-gray-50 rounded-r-md border border-l-0 border-gray-300 hover:bg-gray-100"
                   >
                     <svg
