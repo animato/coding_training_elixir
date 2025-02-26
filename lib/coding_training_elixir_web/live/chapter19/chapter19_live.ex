@@ -29,7 +29,7 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
       assign(socket,
         form: to_form(%{"height" => 180, "weight" => 70, "unit" => "metric"}, errors: []),
         units: @units,
-        result: %{bmi: 0, width: "50%", color: "bg-blue-500", category: "저체중"},
+        result: %{bmi: 0, percentage: "50%", color: "bg-blue-500", category: "저체중"},
         unit: Map.get(@unit_configs, "metric")
       )
 
@@ -63,7 +63,7 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
         %{
           bmi: bmi,
           category: "저체중",
-          width: "#{min(bmi / 40 * 100, 100)}%",
+          percentage: "#{bmi / 18.5 * 18.5}%",
           color: "bg-blue-500"
         }
 
@@ -71,7 +71,7 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
         %{
           bmi: bmi,
           category: "정상",
-          width: "#{min(bmi / 40 * 100, 100)}%",
+          percentage: "#{18.5 + (bmi - 18.5) / (23 - 18.5) * 4.5}%",
           color: "bg-green-500"
         }
 
@@ -79,7 +79,7 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
         %{
           bmi: bmi,
           category: "과체중",
-          width: "#{min(bmi / 40 * 100, 100)}%",
+          percentage: "#{23 + (bmi - 23) / (25 - 23) * 2}%",
           color: "bg-yellow-500"
         }
 
@@ -87,7 +87,7 @@ defmodule CodingTrainingElixirWeb.Chapter19Live do
         %{
           bmi: bmi,
           category: "비만",
-          width: "#{min(bmi / 40 * 100, 100)}%",
+          percentage: "#{25 + min((bmi - 25) / 15, 1) * 75}%",
           color: "bg-red-500"
         }
     end
